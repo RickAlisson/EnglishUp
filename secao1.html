@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seção 1 - EnglishUp</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Raleway:wght@800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #F8F9FA; }
+        h1, .aula-text { font-family: 'Raleway', sans-serif; }
+        .primary-blue { background-color: #4A6DFF; }
+        .primary-blue-text { color: #4A6DFF; }
+        .aula-circle { width: 150px; height: 150px; border: 10px solid #4A6DFF; transition: all 0.3s ease; }
+        .aula-circle:hover { transform: scale(1.1); background-color: #4A6DFF; color: white; }
+    </style>
+</head>
+<body class="p-8 md:p-12">
+    <script>
+        // Content protection
+        if (!localStorage.getItem('loggedInUser')) {
+            window.location.href = 'index.html';
+        }
+    </script>
+    <header class="mb-12">
+        <a href="licoes.html" class="text-gray-500 hover:text-gray-800 transition">← Voltar para Lições</a>
+    </header>
+
+    <main class="container mx-auto text-center">
+        <h1 class="text-5xl font-extrabold text-gray-800 mb-4">Seção 1</h1>
+        <p class="text-xl text-gray-600 mb-16">Aprenda a fazer pedidos e interagir em um restaurante.</p>
+        
+        <div class="flex flex-col md:flex-row justify-center items-center gap-12">
+            <!-- Aula 1 -->
+            <a href="secao1-aula1.html" class="aula-circle rounded-full flex items-center justify-center">
+                <span class="aula-text text-3xl font-extrabold primary-blue-text">AULA 01</span>
+            </a>
+            <!-- Aula 2 -->
+             <a href="#" class="aula-circle rounded-full flex items-center justify-center opacity-50 cursor-not-allowed">
+                <span class="aula-text text-3xl font-extrabold primary-blue-text">AULA 02</span>
+            </a>
+            <!-- Aula 3 -->
+             <a href="#" class="aula-circle rounded-full flex items-center justify-center opacity-50 cursor-not-allowed">
+                <span class="aula-text text-3xl font-extrabold primary-blue-text">AULA 03</span>
+            </a>
+        </div>
+    </main>
+</body>
+</html>

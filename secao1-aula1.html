@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula 1 - Seção 1 - EnglishUp</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Raleway:wght@700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #F8F9FA; }
+        h1, h2 { font-family: 'Raleway', sans-serif; }
+        .primary-blue { background-color: #4A6DFF; }
+        .secondary-gray { background-color: #E9ECEF; }
+        .correct-answer { background-color: #28A745 !important; }
+        .wrong-answer { background-color: #DC3545 !important; }
+        .answer-card { transition: all 0.2s ease-in-out; }
+        .answer-card:not(:disabled):hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+    </style>
+</head>
+<body class="flex flex-col justify-center items-center min-h-screen p-4">
+    <script>
+        // Content protection
+        if (!localStorage.getItem('loggedInUser')) {
+            window.location.href = 'index.html';
+        }
+    </script>
+    <div id="quiz-container" class="w-full max-w-2xl">
+        <!-- Header da Questão -->
+        <header class="flex justify-between items-center mb-8">
+            <a href="secao1.html" class="text-gray-500 hover:text-gray-800 transition">← Voltar</a>
+            <div id="question-counter" class="primary-blue text-white text-2xl font-bold py-2 px-4 rounded-lg">#01</div>
+            <div class="flex items-center space-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+                </svg>
+                <span id="lives" class="text-xl font-bold text-gray-700">3</span>
+            </div>
+        </header>
+
+        <!-- Corpo da Questão -->
+        <main id="question-body" class="text-center">
+            <h2 id="question-title" class="text-3xl font-bold text-gray-800 mb-10"></h2>
+            <div id="answers-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- As opções de resposta serão inseridas aqui pelo JS -->
+            </div>
+        </main>
+        
+        <!-- Navegação -->
+        <footer class="mt-10 text-right">
+             <button id="next-button" class="bg-gray-300 text-gray-500 font-bold py-3 px-8 rounded-lg cursor-not-allowed" disabled>Next ></button>
+        </footer>
+    </div>
+    
+    <!-- Tela de Conclusão (escondida por padrão) -->
+    <div id="completion-screen" class="w-full max-w-2xl text-center hidden">
+        <h1 class="text-5xl font-extrabold text-gray-800 mb-4">Parabéns!</h1>
+        <p class="text-xl text-gray-600 mb-8">Você completou a Aula 1 da Seção 1.</p>
+        <div class="flex justify-center space-x-4">
+            <a href="secao1-aula1.html" class="primary-blue text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition shadow-lg">Refazer Aula</a>
+            <a href="secao1.html" class="secondary-gray text-gray-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-300 transition shadow-lg">Voltar para Seção</a>
+        </div>
+    </div>
+
+    <!-- Tela de Game Over (escondida por padrão) -->
+    <div id="game-over-screen" class="w-full max-w-2xl text-center hidden">
+        <h1 class="text-5xl font-extrabold text-red-500 mb-4">Game Over</h1>
+        <p class="text-xl text-gray-600 mb-8">Você não tem mais vidas.</p>
+        <div class="flex justify-center space-x-4">
+            <a href="secao1-aula1.html" class="primary-blue text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition shadow-lg">Tentar Novamente</a>
+            <a href="secao1.html" class="secondary-gray text-gray-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-300 transition shadow-lg">Voltar para Seção</a>
+        </div>
+    </div>
+
+
+    <script>
+        const quizData = [
+            { question: "O que significa 'menu'?", options: ["Cardápio", "Conta", "Garçom", "Mesa"], answer: "Cardápio" },
+            { question: "Como se pede a conta em inglês?", options: ["The bill, please.", "The menu, please.", "A table, please.", "The food, please."], answer: "The bill, please." },
+            { question: "O que é um 'appetizer'?", options: ["Entrada", "Prato principal", "Sobremesa", "Bebida"], answer: "Entrada" },
+            { question: "Qual palavra significa 'garçom'?", options: ["Waiter", "Chef", "Cook", "Host"], answer: "Waiter" },
+            { question: "O que você diria para reservar uma mesa?", options: ["I'd like to book a table.", "Can I have the menu?", "Is this seat taken?", "I'm ready to order."], answer: "I'd like to book a table." },
+            { question: "O que é o 'main course'?", options: ["Prato principal", "Bebida", "Aperitivo", "Gorjeta"], answer: "Prato principal" },
+            { question: "Como se diz 'sobremesa' em inglês?", options: ["Dessert", "Drink", "Salad", "Soup"], answer: "Dessert" },
+            { question: "O que significa 'tip' no contexto de um restaurante?", options: ["Gorjeta", "Dica", "Topo", "Tipo"], answer: "Gorjeta" },
+            { question: "Qual a tradução para 'fork'?", options: ["Garfo", "Faca", "Colher", "Prato"], answer: "Garfo" },
+            { question: "O que você diria se a comida estivesse deliciosa?", options: ["It's delicious!", "It's terrible!", "I'm full.", "I need a napkin."], answer: "It's delicious!" }
+        ];
+
+        let currentQuestionIndex = 0;
+        let lives = 3;
+        let answered = false;
+
+        const questionCounter = document.getElementById('question-counter');
+        const livesCounter = document.getElementById('lives');
+        const questionTitle = document.getElementById('question-title');
+        const answersGrid = document.getElementById('answers-grid');
+        const nextButton = document.getElementById('next-button');
+        const quizContainer = document.getElementById('quiz-container');
+        const completionScreen = document.getElementById('completion-screen');
+        const gameOverScreen = document.getElementById('game-over-screen');
+
+        function loadQuestion() {
+            answered = false;
+            const currentQuestion = quizData[currentQuestionIndex];
+            
+            questionCounter.textContent = `#${(currentQuestionIndex + 1).toString().padStart(2, '0')}`;
+            questionTitle.textContent = currentQuestion.question;
+            answersGrid.innerHTML = '';
+
+            currentQuestion.options.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.classList.add('answer-card', 'p-6', 'rounded-lg', 'font-semibold', 'bg-white', 'shadow');
+                button.onclick = () => selectAnswer(button, option, currentQuestion.answer);
+                answersGrid.appendChild(button);
+            });
+            
+            nextButton.classList.add('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+            nextButton.classList.remove('primary-blue', 'text-white');
+            nextButton.disabled = true;
+        }
+
+        function selectAnswer(button, selectedOption, correctAnswer) {
+            if (answered) return;
+            answered = true;
+            
+            const allButtons = answersGrid.querySelectorAll('button');
+            allButtons.forEach(btn => btn.disabled = true); 
+
+            if (selectedOption !== correctAnswer) {
+                button.classList.add('wrong-answer', 'text-white');
+                
+                allButtons.forEach(btn => {
+                    if (btn.textContent === correctAnswer) {
+                        btn.classList.add('correct-answer', 'text-white');
+                    }
+                });
+
+                lives--;
+                livesCounter.textContent = lives;
+                
+                if (lives === 0) {
+                     setTimeout(() => {
+                        quizContainer.classList.add('hidden');
+                        gameOverScreen.classList.remove('hidden');
+                     }, 1200); 
+                     return;
+                }
+
+            } else {
+                button.classList.add('correct-answer', 'text-white');
+            }
+            
+            nextButton.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+            nextButton.classList.add('primary-blue', 'text-white');
+            nextButton.disabled = false;
+        }
+        
+        nextButton.addEventListener('click', () => {
+            if (nextButton.disabled) return;
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                loadQuestion();
+            } else {
+                quizContainer.classList.add('hidden');
+                completionScreen.classList.remove('hidden');
+            }
+        });
+
+        loadQuestion();
+    </script>
+</body>
+</html>
