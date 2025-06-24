@@ -91,14 +91,8 @@
     <header class="container mx-auto px-6 py-4 flex justify-between items-center">
         <h1 class="text-3xl font-bold primary-blue-text">EnglishUp</h1>
         
-        <!-- Links de autenticação (Visíveis quando não logado) -->
-        <div id="auth-links" class="flex items-center space-x-4">
-            <button id="register-btn" class="text-gray-600 hover:text-blue-500 rounded-lg px-4 py-2">Cadastrar-se</button>
-            <button id="login-btn" class="bg-white text-blue-500 border border-blue-500 px-6 py-2 rounded-lg hover:bg-blue-500 hover:text-white transition">Entrar</button>
-        </div>
-        
-        <!-- Botão de menu da conta (Visível quando logado) -->
-        <div id="user-info" class="hidden items-center space-x-4">
+        <!-- Botão de menu da conta (sempre visível) -->
+        <div id="user-menu-container">
             <button id="account-menu-toggle-btn" class="text-gray-700 p-2 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400">
                 <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
             </button>
@@ -109,14 +103,25 @@
     <div id="account-menu-overlay" class="hidden account-menu-overlay">
         <div id="account-menu-content" class="account-menu-content">
             <button id="close-account-menu" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
-            <h3 class="text-xl font-bold mb-6 text-center primary-blue-text">Minha Conta</h3>
-            <p id="user-name-menu" class="font-semibold text-gray-700 text-center mb-6"></p>
-            <ul class="mt-8 space-y-4 text-lg">
-                <li><a href="meu-perfil.html" class="block text-gray-700 hover:text-blue-500 p-2 rounded-lg">Meu Perfil</a></li>
-                <li><a href="#" class="block text-gray-700 hover:text-blue-500 p-2 rounded-lg">Configurações</a></li>
-                <li><a href="licoes.html" class="block text-gray-700 hover:text-blue-500 p-2 rounded-lg">Minhas Lições</a></li>
-            </ul>
-            <button id="logout-btn-menu" class="w-full text-red-500 border border-red-500 px-6 py-2 rounded-lg hover:bg-red-500 hover:text-white transition mt-8">Sair</button>
+            <h3 class="text-xl font-bold mb-6 text-center primary-blue-text">Conta</h3>
+            
+            <!-- Conteúdo do menu para USUÁRIOS LOGADOS -->
+            <div id="logged-in-menu-options" class="hidden">
+                <p id="user-name-menu" class="font-semibold text-gray-700 text-center mb-6"></p>
+                <ul class="mt-8 space-y-4 text-lg">
+                    <li><a href="meu-perfil.html" class="block text-gray-700 hover:text-blue-500 p-2 rounded-lg">Meu Perfil</a></li>
+                    <li><a href="#" class="block text-gray-700 hover:text-blue-500 p-2 rounded-lg">Configurações</a></li>
+                    <li><a href="licoes.html" class="block text-gray-700 hover:text-blue-500 p-2 rounded-lg">Minhas Lições</a></li>
+                </ul>
+                <button id="logout-btn-menu" class="w-full text-red-500 border border-red-500 px-6 py-2 rounded-lg hover:bg-red-500 hover:text-white transition mt-8">Sair</button>
+            </div>
+
+            <!-- Conteúdo do menu para USUÁRIOS NÃO LOGADOS -->
+            <div id="logged-out-menu-options" class="hidden">
+                <p class="text-gray-700 text-center mb-6">Bem-vindo(a)!</p>
+                <button id="menu-login-btn" class="w-full bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition mb-4">Entrar</button>
+                <button id="menu-register-btn" class="w-full text-blue-500 border border-blue-500 px-6 py-2 rounded-lg hover:bg-blue-500 hover:text-white transition">Cadastrar-se</button>
+            </div>
         </div>
     </div>
 
@@ -301,15 +306,12 @@
     
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Obter elementos para autenticação e informações do usuário
-        const authLinks = document.getElementById('auth-links');
-        const userInfo = document.getElementById('user-info');
+        // Obter elementos para os conteúdos da homepage (logado/deslogado)
         const loggedOutHomeContent = document.getElementById('logged-out-home-content');
         const loggedInHomeContent = document.getElementById('logged-in-home-content');
         const welcomeMessage = document.getElementById('welcome-message');
         const featuredLessonsGrid = document.getElementById('featured-lessons-grid');
         const articlesGrid = document.getElementById('articles-grid');
-
 
         // Obter elementos para os modais de login/cadastro
         const registerBtn = document.getElementById('register-btn');
@@ -333,15 +335,20 @@
         const discoverMoreBtn = document.getElementById('discover-more-btn');
         const aboutUsSection = document.getElementById('about-us-section');
 
-        // Elementos do menu de conta
+        // Elementos do menu de conta (universal agora)
         const accountMenuToggleBtn = document.getElementById('account-menu-toggle-btn');
         const accountMenuOverlay = document.getElementById('account-menu-overlay');
         const accountMenuContent = document.getElementById('account-menu-content');
         const closeAccountMenuBtn = document.getElementById('close-account-menu');
         const userNameMenuEl = document.getElementById('user-name-menu');
         const logoutBtnMenu = document.getElementById('logout-btn-menu');
+        const loggedInMenuOptions = document.getElementById('logged-in-menu-options');
+        const loggedOutMenuOptions = document.getElementById('logged-out-menu-options');
+        const menuLoginBtn = document.getElementById('menu-login-btn');
+        const menuRegisterBtn = document.getElementById('menu-register-btn');
 
-        // Botões que levam ao modal de registro
+
+        // Botões que levam ao modal de registro (para usuários deslogados)
         const startNowBtn = document.getElementById('start-now-btn');
         const learnEnglishBtn = document.getElementById('learn-english-btn');
 
@@ -359,32 +366,33 @@
             { title: "5 Dicas Essenciais para Melhorar sua Pronúncia", snippet: "Descubra como pequenos ajustes podem fazer uma grande diferença na sua clareza ao falar inglês.", url: "#" },
             { title: "Guia Completo de Phrasal Verbs", snippet: "Desmistifique os phrasal verbs mais comuns e como usá-los no dia a dia.", url: "#" },
             { title: "Como Manter a Motivação no Aprendizado de Inglês", snippet: "Estratégias eficazes para manter o foco e o ânimo durante sua jornada de aprendizado.", url: "#" },
+            { title: "Erros Comuns de Iniciantes em Inglês", snippet: "Evite as armadilhas mais comuns ao começar a aprender inglês.", url: "#" },
         ];
 
         /**
-         * Shuffles an array in place (Fisher-Yates algorithm).
-         * @param {Array} array The array to shuffle.
+         * Embaralha um array no lugar (algoritmo de Fisher-Yates).
+         * @param {Array} array O array a ser embaralhado.
          */
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+                [array[i], array[j]] = [array[j], array[i]]; // Troca elementos
             }
         }
 
         /**
-         * Renders a selection of featured lessons.
-         * @param {number} count The number of lessons to display.
+         * Renderiza uma seleção de lições em destaque.
+         * @param {number} count O número de lições a serem exibidas.
          */
         function renderFeaturedLessons(count) {
             featuredLessonsGrid.innerHTML = '';
-            const shuffledLessons = [...allLessons]; // Create a copy to shuffle
+            const shuffledLessons = [...allLessons]; // Cria uma cópia para embaralhar
             shuffleArray(shuffledLessons);
 
             for (let i = 0; i < Math.min(count, shuffledLessons.length); i++) {
                 const lesson = shuffledLessons[i];
                 const lessonCard = `
-                    <a href="${lesson.url}" class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <a href="${lesson.url}" class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 block">
                         <h3 class="text-xl font-semibold text-gray-800 mb-2">${lesson.title}</h3>
                         <p class="text-gray-600">${lesson.desc}</p>
                     </a>
@@ -394,18 +402,18 @@
         }
 
         /**
-         * Renders a selection of articles.
-         * @param {number} count The number of articles to display.
+         * Renderiza uma seleção de artigos.
+         * @param {number} count O número de artigos a serem exibidos.
          */
         function renderArticles(count) {
             articlesGrid.innerHTML = '';
-            const shuffledArticles = [...allArticles]; // Create a copy to shuffle
+            const shuffledArticles = [...allArticles]; // Cria uma cópia para embaralhar
             shuffleArray(shuffledArticles);
 
             for (let i = 0; i < Math.min(count, shuffledArticles.length); i++) {
                 const article = shuffledArticles[i];
                 const articleCard = `
-                    <a href="${article.url}" class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    <a href="${article.url}" class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 block">
                         <h3 class="text-xl font-semibold text-gray-800 mb-2">${article.title}</h3>
                         <p class="text-gray-600 text-sm">${article.snippet}</p>
                     </a>
@@ -415,13 +423,13 @@
         }
 
 
-        // Função para exibir mensagens personalizadas
+        // Função para exibir mensagens personalizadas no modal
         function showMessage(message) {
             messageTextEl.textContent = message;
             messageModal.classList.remove('hidden');
         }
 
-        // Função para ocultar mensagens personalizadas
+        // Função para ocultar mensagens personalizadas do modal
         function hideMessage() {
             messageModal.classList.add('hidden');
         }
@@ -430,7 +438,6 @@
         closeMessageModalBtn.addEventListener('click', hideMessage);
         messageOkBtn.addEventListener('click', hideMessage);
         messageModal.addEventListener('click', (e) => {
-            // Fechar se clicar fora do conteúdo
             if (e.target === messageModal) {
                 hideMessage();
             }
@@ -441,33 +448,44 @@
         function checkLoginState() {
             const loggedInUser = localStorage.getItem('loggedInUser'); // Obter usuário logado do armazenamento local
             if (loggedInUser) {
-                // Se um usuário estiver logado:
-                authLinks.classList.add('hidden'); // Ocultar links de autenticação
-                userInfo.classList.remove('hidden'); // Mostrar o botão do menu da conta
-                userInfo.classList.add('flex');
+                // Usuário LOGADO
+                loggedOutHomeContent.classList.add('hidden'); // Ocultar conteúdo deslogado
+                loggedInHomeContent.classList.remove('hidden'); // Mostrar conteúdo logado
+                
+                // Exibir botão do menu no cabeçalho
+                // authLinks.classList.add('hidden'); // Não existe mais nesse HTML principal do header
+                // userInfo.classList.remove('hidden'); // Não existe mais nesse HTML principal do header
+                // userInfo.classList.add('flex'); // Não existe mais nesse HTML principal do header
+
+                // Configurar menu lateral para LOGADO
+                loggedInMenuOptions.classList.remove('hidden');
+                loggedOutMenuOptions.classList.add('hidden');
                 userNameMenuEl.textContent = `Olá, ${loggedInUser}!`; // Atualiza o nome no menu lateral
 
-                loggedOutHomeContent.classList.add('hidden'); // Ocultar conteúdo de homepage deslogado
-                loggedInHomeContent.classList.remove('hidden'); // Mostrar conteúdo de homepage logado
-                
                 welcomeMessage.textContent = `Bem-vindo de volta, ${loggedInUser}!`; // Personalizar mensagem de boas-vindas
                 renderFeaturedLessons(3); // Renderizar 3 aulas em destaque
                 renderArticles(2); // Renderizar 2 artigos
 
             } else {
-                // Se nenhum usuário estiver logado:
-                authLinks.classList.remove('hidden'); // Mostrar links de autenticação
-                userInfo.classList.add('hidden'); // Ocultar o botão do menu da conta
-                userInfo.classList.remove('flex');
+                // Usuário NÃO LOGADO
+                loggedOutHomeContent.classList.remove('hidden'); // Mostrar conteúdo deslogado
+                loggedInHomeContent.classList.add('hidden'); // Ocultar conteúdo logado
 
-                loggedOutHomeContent.classList.remove('hidden'); // Mostrar conteúdo de homepage deslogado
-                loggedInHomeContent.classList.add('hidden'); // Ocultar conteúdo de homepage logado
+                // Esconder botão do menu no cabeçalho se ele for para usuário logado (apenas para este HTML)
+                // authLinks.classList.remove('hidden'); // Não existe mais
+                // userInfo.classList.add('hidden'); // Não existe mais
+                // userInfo.classList.remove('flex'); // Não existe mais
+
+                // Configurar menu lateral para NÃO LOGADO
+                loggedInMenuOptions.classList.add('hidden');
+                loggedOutMenuOptions.classList.remove('hidden');
             }
         }
         
         // Lógica dos modais de login/cadastro: abrir/fechar
-        registerBtn.addEventListener('click', () => registerModal.classList.remove('hidden'));
-        loginBtn.addEventListener('click', () => loginModal.classList.remove('hidden'));
+        if (registerBtn) registerBtn.addEventListener('click', () => registerModal.classList.remove('hidden'));
+        if (loginBtn) loginBtn.addEventListener('click', () => loginModal.classList.remove('hidden'));
+        
         closeRegisterModalBtn.addEventListener('click', () => registerModal.classList.add('hidden'));
         closeLoginModalBtn.addEventListener('click', () => loginModal.classList.add('hidden'));
 
@@ -523,8 +541,8 @@
             if (user) {
                 localStorage.setItem('loggedInUser', user.name); // Armazenar o nome do usuário logado
                 loginModal.classList.add('hidden'); // Ocultar modal de login
-                checkLoginState(); // Atualizar interface
-                window.location.href = 'licoes.html'; // Redirecionar para a página de lições
+                checkLoginState(); // Atualizar interface (para mostrar conteúdo logado)
+                //window.location.href = 'licoes.html'; // Removido: o usuário fica na home logada
             } else {
                 showMessage('Email ou senha inválidos.'); // Mostrar mensagem de erro
             }
@@ -533,10 +551,10 @@
         // Lógica de logout para o menu lateral
         function performLogout() {
             localStorage.removeItem('loggedInUser'); // Remover usuário logado do armazenamento local
-            checkLoginState(); // Atualizar interface
+            checkLoginState(); // Atualizar interface (para mostrar conteúdo deslogado)
             showMessage('Você foi desconectado.');
-            // Redirecionar para a página inicial após o logout
-            // window.location.href = 'index.html';
+            // Opcional: Redirecionar para a página inicial após o logout (já estamos nela)
+            // window.location.reload(); // Recarrega a página para garantir que tudo reset
         }
         logoutBtnMenu.addEventListener('click', performLogout);
 
@@ -565,19 +583,28 @@
             }
         });
 
+        // Listeners para botões de login/registro DENTRO do menu
+        if(menuLoginBtn) menuLoginBtn.addEventListener('click', () => {
+            accountMenuOverlay.classList.add('hidden'); // Fecha o menu lateral
+            loginModal.classList.remove('hidden'); // Abre o modal de login
+        });
+        if(menuRegisterBtn) menuRegisterBtn.addEventListener('click', () => {
+            accountMenuOverlay.classList.add('hidden'); // Fecha o menu lateral
+            registerModal.classList.remove('hidden'); // Abre o modal de registro
+        });
+
 
         // Rolagem suave para o botão "Conheça mais" (apenas para deslogados)
-        if (discoverMoreBtn) { // Verifica se o elemento existe no DOM atual
+        if (discoverMoreBtn) { 
             discoverMoreBtn.addEventListener('click', (e) => {
-                e.preventDefault(); // Prevenir comportamento padrão do link âncora
-                if (aboutUsSection) { // Verifica se a seção alvo existe
+                e.preventDefault(); 
+                if (aboutUsSection) { 
                     aboutUsSection.scrollIntoView({ behavior: 'smooth' });
                 }
             });
         }
 
-        // Event listeners para os botões que levam ao modal de registro (apenas para deslogados)
-        // Certifique-se de que os elementos existam antes de adicionar listeners
+        // Event listeners para os botões que levam ao modal de registro (para deslogados)
         if (startNowBtn) { 
             startNowBtn.addEventListener('click', () => {
                 registerModal.classList.remove('hidden');
@@ -596,3 +623,4 @@
     </script>
 </body>
 </html>
+um 
