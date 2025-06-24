@@ -17,19 +17,101 @@
         .wrong-answer { background-color: #DC3545 !important; }
         .answer-card { transition: all 0.2s ease-in-out; }
         .answer-card:not(:disabled):hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+        /* Styles for custom message box */
+        .message-modal {
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+        }
+        .message-modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+        .message-modal-close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            color: #6B7280;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
     </style>
 </head>
 <body class="flex flex-col justify-center items-center min-h-screen p-4">
+
+    <!-- Message Modal -->
+    <div id="message-modal" class="hidden message-modal">
+        <div class="message-modal-content">
+            <button id="close-message-modal" class="message-modal-close-btn">&times;</button>
+            <p id="message-text" class="text-lg text-gray-800"></p>
+            <button id="message-ok-btn" class="bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold mt-6 hover:bg-blue-600">OK</button>
+        </div>
+    </div>
+
     <script>
-        // Content protection
-        if (!localStorage.getItem('loggedInUser')) {
-            window.location.href = 'index.html';
+        // Get elements for the custom message modal
+        const messageModal = document.getElementById('message-modal');
+        const messageTextEl = document.getElementById('message-text');
+        const closeMessageModalBtn = document.getElementById('close-message-modal');
+        const messageOkBtn = document.getElementById('message-ok-btn');
+
+        // Function to display custom messages
+        function showMessage(message) {
+            messageTextEl.textContent = message;
+            messageModal.classList.remove('hidden');
         }
+
+        // Function to hide custom messages
+        function hideMessage() {
+            messageModal.classList.add('hidden');
+        }
+
+        // Event listeners for message modal
+        closeMessageModalBtn.addEventListener('click', hideMessage);
+        messageOkBtn.addEventListener('click', hideMessage);
+        messageModal.addEventListener('click', (e) => {
+            // Close if clicking outside the content
+            if (e.target === messageModal) {
+                hideMessage();
+            }
+        });
+
+        // Content protection
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!localStorage.getItem('loggedInUser')) {
+                showMessage('Você precisa estar logado para acessar esta página.');
+                // Use a slight delay before redirecting to allow the message to be seen
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500); // 1.5 seconds delay
+            }
+        });
     </script>
-    <div id="quiz-container" class="w-full max-w-2xl">
+
+    <div id="quiz-container" class="w-full max-w-3xl"> <!-- Changed max-w-2xl to max-w-3xl -->
         <!-- Header da Questão -->
         <header class="flex justify-between items-center mb-8">
-            <a href="secao1.html" class="text-gray-500 hover:text-gray-800 transition">← Voltar</a>
+            <a href="secao1.html" class="text-gray-500 hover:text-gray-800 transition flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Voltar
+            </a>
             <div id="question-counter" class="primary-blue text-white text-2xl font-bold py-2 px-4 rounded-lg">#01</div>
             <div class="flex items-center space-x-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" viewBox="0 0 20 20" fill="currentColor">
@@ -49,7 +131,7 @@
         
         <!-- Navegação -->
         <footer class="mt-10 text-right">
-             <button id="next-button" class="bg-gray-300 text-gray-500 font-bold py-3 px-8 rounded-lg cursor-not-allowed" disabled>Next ></button>
+            <button id="next-button" class="bg-gray-300 text-gray-500 font-bold py-3 px-8 rounded-lg cursor-not-allowed" disabled>Próximo ></button>
         </footer>
     </div>
     
@@ -75,23 +157,23 @@
 
 
     <script>
+        // Data for quiz questions and answers
         const quizData = [
-            { question: "O que significa 'menu'?", options: ["Cardápio", "Conta", "Garçom", "Mesa"], answer: "Cardápio" },
-            { question: "Como se pede a conta em inglês?", options: ["The bill, please.", "The menu, please.", "A table, please.", "The food, please."], answer: "The bill, please." },
-            { question: "O que é um 'appetizer'?", options: ["Entrada", "Prato principal", "Sobremesa", "Bebida"], answer: "Entrada" },
-            { question: "Qual palavra significa 'garçom'?", options: ["Waiter", "Chef", "Cook", "Host"], answer: "Waiter" },
-            { question: "O que você diria para reservar uma mesa?", options: ["I'd like to book a table.", "Can I have the menu?", "Is this seat taken?", "I'm ready to order."], answer: "I'd like to book a table." },
-            { question: "O que é o 'main course'?", options: ["Prato principal", "Bebida", "Aperitivo", "Gorjeta"], answer: "Prato principal" },
-            { question: "Como se diz 'sobremesa' em inglês?", options: ["Dessert", "Drink", "Salad", "Soup"], answer: "Dessert" },
-            { question: "O que significa 'tip' no contexto de um restaurante?", options: ["Gorjeta", "Dica", "Topo", "Tipo"], answer: "Gorjeta" },
-            { question: "Qual a tradução para 'fork'?", options: ["Garfo", "Faca", "Colher", "Prato"], answer: "Garfo" },
-            { question: "O que você diria se a comida estivesse deliciosa?", options: ["It's delicious!", "It's terrible!", "I'm full.", "I need a napkin."], answer: "It's delicious!" }
+            { question: "Como você pediria para ver o cardápio em inglês?", options: ["The bill, please.", "Can I see the menu, please?", "I'd like to book a table.", "What's the special today?"], answer: "Can I see the menu, please?" },
+            { question: "Qual a frase para pedir a conta?", options: ["I want to pay.", "Check, please.", "I'm finished.", "Could I have the bill, please?"], answer: "Could I have the bill, please?" },
+            { question: "O que é um 'main course'?", options: ["A sobremesa.", "A entrada.", "O prato principal.", "A bebida."], answer: "O prato principal." },
+            { question: "Qual a tradução de 'waiter'?", options: ["Cozinheiro", "Garçom", "Cliente", "Gerente"], answer: "Garçom" },
+            { question: "Como você diria 'Está delicioso!' sobre a comida?", options: ["It's awful!", "It's cold.", "It's delicious!", "It's too salty."], answer: "It's delicious!" },
+            { question: "O que significa 'tip' em um restaurante?", options: ["Uma dica.", "Uma gorjeta.", "O topo.", "Um tipo de comida."], answer: "Uma gorjeta." },
+            { question: "Qual a palavra para 'bebida'?", options: ["Food", "Dessert", "Drink", "Appetizer"], answer: "Drink" },
+            { question: "Você quer saber se o restaurante tem opções vegetarianas. Como perguntaria?", options: ["Do you have any meat dishes?", "Are there vegan options?", "Do you serve seafood?", "Do you have vegetarian options?"], answer: "Do you have vegetarian options?" }
         ];
 
         let currentQuestionIndex = 0;
         let lives = 3;
-        let answered = false;
+        let answered = false; // Flag to check if the current question has been answered
 
+        // Get DOM elements
         const questionCounter = document.getElementById('question-counter');
         const livesCounter = document.getElementById('lives');
         const questionTitle = document.getElementById('question-title');
@@ -101,74 +183,115 @@
         const completionScreen = document.getElementById('completion-screen');
         const gameOverScreen = document.getElementById('game-over-screen');
 
+        /**
+         * Shuffles an array in place (Fisher-Yates algorithm).
+         * @param {Array} array The array to shuffle.
+         */
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+            }
+        }
+
+        /**
+         * Loads the current question and its options into the quiz interface.
+         */
         function loadQuestion() {
-            answered = false;
+            answered = false; // Reset answered flag for the new question
             const currentQuestion = quizData[currentQuestionIndex];
             
+            // Update question counter
             questionCounter.textContent = `#${(currentQuestionIndex + 1).toString().padStart(2, '0')}`;
+            // Set question title
             questionTitle.textContent = currentQuestion.question;
+            // Clear previous answers
             answersGrid.innerHTML = '';
 
-            currentQuestion.options.forEach(option => {
+            // Shuffle options before displaying them
+            const shuffledOptions = [...currentQuestion.options]; // Create a copy to shuffle
+            shuffleArray(shuffledOptions);
+
+            // Create and append buttons for each option
+            shuffledOptions.forEach(option => {
                 const button = document.createElement('button');
                 button.textContent = option;
+                // Add Tailwind CSS classes for styling
                 button.classList.add('answer-card', 'p-6', 'rounded-lg', 'font-semibold', 'bg-white', 'shadow');
+                // Attach click event listener
                 button.onclick = () => selectAnswer(button, option, currentQuestion.answer);
                 answersGrid.appendChild(button);
             });
             
+            // Disable and reset style of the "Next" button
             nextButton.classList.add('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
             nextButton.classList.remove('primary-blue', 'text-white');
             nextButton.disabled = true;
         }
 
+        /**
+         * Handles the user's answer selection.
+         * @param {HTMLElement} button The button element that was clicked.
+         * @param {string} selectedOption The text content of the selected option.
+         * @param {string} correctAnswer The correct answer for the current question.
+         */
         function selectAnswer(button, selectedOption, correctAnswer) {
-            if (answered) return;
-            answered = true;
+            if (answered) return; // Prevent multiple selections for the same question
+            answered = true; // Mark question as answered
             
+            // Disable all answer buttons to prevent further clicks
             const allButtons = answersGrid.querySelectorAll('button');
-            allButtons.forEach(btn => btn.disabled = true); 
+            allButtons.forEach(btn => btn.disabled = true);    
 
             if (selectedOption !== correctAnswer) {
-                button.classList.add('wrong-answer', 'text-white');
+                // If answer is wrong
+                button.classList.add('wrong-answer', 'text-white'); // Highlight wrong answer
                 
+                // Highlight the correct answer
                 allButtons.forEach(btn => {
                     if (btn.textContent === correctAnswer) {
                         btn.classList.add('correct-answer', 'text-white');
                     }
                 });
 
-                lives--;
-                livesCounter.textContent = lives;
+                lives--; // Decrease lives
+                livesCounter.textContent = lives; // Update lives display
                 
+                // Check for game over
                 if (lives === 0) {
-                     setTimeout(() => {
-                        quizContainer.classList.add('hidden');
-                        gameOverScreen.classList.remove('hidden');
-                     }, 1200); 
-                     return;
+                    setTimeout(() => {
+                        quizContainer.classList.add('hidden'); // Hide quiz
+                        gameOverScreen.classList.remove('hidden'); // Show game over screen
+                    }, 1200); // Delay to allow user to see correct/wrong answers
+                    return; // Stop execution
                 }
 
             } else {
-                button.classList.add('correct-answer', 'text-white');
+                // If answer is correct
+                button.classList.add('correct-answer', 'text-white'); // Highlight correct answer
             }
             
+            // Enable and style the "Next" button
             nextButton.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
             nextButton.classList.add('primary-blue', 'text-white');
             nextButton.disabled = false;
         }
         
+        // Event listener for the "Next" button
         nextButton.addEventListener('click', () => {
-            if (nextButton.disabled) return;
-            currentQuestionIndex++;
+            if (nextButton.disabled) return; // Do nothing if button is disabled
+
+            currentQuestionIndex++; // Move to the next question
             if (currentQuestionIndex < quizData.length) {
-                loadQuestion();
+                loadQuestion(); // Load the next question
             } else {
+                // All questions answered, show completion screen
                 quizContainer.classList.add('hidden');
                 completionScreen.classList.remove('hidden');
             }
         });
 
+        // Initial load of the first question when the page loads
         loadQuestion();
     </script>
 </body>
