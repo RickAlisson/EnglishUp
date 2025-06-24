@@ -9,10 +9,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Raleway:wght@400;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: 'Poppins', sans-serif; background-color: #F8F9FA; }
+        body { font-family: 'Poppins', sans-serif; background-color: #F8F9FA; color: #333; }
         h1, h2 { font-family: 'Raleway', sans-serif; }
         .primary-blue-text { color: #4A6DFF; }
-        /* Styles for custom message box */
+        /* Estilos para o modal de mensagem */
         .message-modal {
             background-color: rgba(0, 0, 0, 0.6);
             display: flex;
@@ -45,11 +45,37 @@
             border: none;
             background: none;
         }
+        /* Estilos para o overlay do menu mobile (agora usado em todas as telas para o menu de conta) */
+        .account-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 40;
+            display: flex;
+            justify-content: flex-end; /* Alinhar à direita para efeito de slide-in */
+        }
+        .account-menu-content {
+            background-color: white;
+            width: 80%; /* Ajustar largura para menu */
+            max-width: 300px; /* Largura máxima para menu */
+            height: 100%;
+            padding: 2rem;
+            box-shadow: -4px 0 10px rgba(0,0,0,0.2);
+            position: relative;
+            transform: translateX(100%); /* Começar fora da tela */
+            transition: transform 0.3s ease-out; /* Slide-in suave */
+        }
+        .account-menu-content.open {
+            transform: translateX(0); /* Deslizar para dentro */
+        }
     </style>
 </head>
 <body class="p-8 md:p-12">
 
-    <!-- Message Modal -->
+    <!-- Modal de Mensagem -->
     <div id="message-modal" class="hidden message-modal">
         <div class="message-modal-content">
             <button id="close-message-modal" class="message-modal-close-btn">&times;</button>
@@ -60,8 +86,29 @@
 
     <header class="mb-12 flex justify-between items-center">
         <a href="index.html" class="text-3xl font-bold primary-blue-text">EnglishUp</a>
-        <span id="user-greeting" class="font-semibold text-gray-700"></span>
+        
+        <!-- Botão de menu da conta (sempre visível) -->
+        <div id="user-menu-container">
+            <button id="account-menu-toggle-btn" class="text-gray-700 p-2 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
     </header>
+
+    <!-- Overlay do Menu da Conta (Inicialmente oculto) -->
+    <div id="account-menu-overlay" class="hidden account-menu-overlay">
+        <div id="account-menu-content" class="account-menu-content">
+            <button id="close-account-menu" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
+            <h3 class="text-xl font-bold mb-6 text-center primary-blue-text">Minha Conta</h3>
+            <p id="user-name-menu" class="font-semibold text-gray-700 text-center mb-6"></p>
+            <ul class="mt-8 space-y-4 text-lg">
+                <li><a href="meu-perfil.html" class="block text-gray-700 hover:text-blue-500 p-2 rounded-lg">Meu Perfil</a></li>
+                <li><a href="#" class="block text-gray-700 hover:text-blue-500 p-2 rounded-lg">Configurações</a></li>
+                <li><a href="licoes.html" class="block text-gray-700 hover:text-blue-500 p-2 rounded-lg">Minhas Lições</a></li>
+            </ul>
+            <button id="logout-btn-menu" class="w-full text-red-500 border border-red-500 px-6 py-2 rounded-lg hover:bg-red-500 hover:text-white transition mt-8">Sair</button>
+        </div>
+    </div>
 
     <main class="container mx-auto">
         <h1 class="text-5xl font-extrabold text-gray-800 mb-10 text-center">Lições</h1>
@@ -190,7 +237,7 @@
             <div class="bg-white p-8 rounded-2xl shadow-lg flex justify-between items-center opacity-50 cursor-not-allowed">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800 mb-2">Seção 11: Meio Ambiente</h2>
-                    <p class="text-600">Discuta sobre sustentabilidade e natureza.</p>
+                    <p class="text-gray-600">Discuta sobre sustentabilidade e natureza.</p>
                 </div>
                 <div class="bg-gray-100 p-3 rounded-full">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -236,44 +283,88 @@
             </div>
         </div>
     </main>
+
     <script>
-        // Get elements for the custom message modal
+        // Obter elementos para o modal de mensagem personalizado
         const messageModal = document.getElementById('message-modal');
         const messageTextEl = document.getElementById('message-text');
         const closeMessageModalBtn = document.getElementById('close-message-modal');
         const messageOkBtn = document.getElementById('message-ok-btn');
 
-        // Function to display custom messages
+        // Elementos do menu da conta
+        const accountMenuToggleBtn = document.getElementById('account-menu-toggle-btn');
+        const accountMenuOverlay = document.getElementById('account-menu-overlay');
+        const accountMenuContent = document.getElementById('account-menu-content');
+        const closeAccountMenuBtn = document.getElementById('close-account-menu');
+        const userNameMenuEl = document.getElementById('user-name-menu');
+        const logoutBtnMenu = document.getElementById('logout-btn-menu');
+
+
+        // Função para exibir mensagens personalizadas
         function showMessage(message) {
             messageTextEl.textContent = message;
             messageModal.classList.remove('hidden');
         }
 
-        // Function to hide custom messages
+        // Função para ocultar mensagens personalizadas
         function hideMessage() {
             messageModal.classList.add('hidden');
         }
 
-        // Event listeners for message modal
+        // Listeners de eventos para o modal de mensagem
         closeMessageModalBtn.addEventListener('click', hideMessage);
         messageOkBtn.addEventListener('click', hideMessage);
         messageModal.addEventListener('click', (e) => {
-            // Close if clicking outside the content
+            // Fechar se clicar fora do conteúdo
             if (e.target === messageModal) {
                 hideMessage();
             }
         });
 
-        // Content protection
+        // Lógica de logout
+        function performLogout() {
+            localStorage.removeItem('loggedInUser'); // Remover usuário logado do armazenamento local
+            showMessage('Você foi desconectado.');
+            // Redirecionar para a página inicial após o logout
+            window.location.href = 'index.html';
+        }
+
+        logoutBtnMenu.addEventListener('click', performLogout);
+
+        // Lógica do menu da conta
+        accountMenuToggleBtn.addEventListener('click', () => {
+            accountMenuOverlay.classList.remove('hidden');
+            setTimeout(() => {
+                accountMenuContent.classList.add('open');
+            }, 10); // Pequeno atraso para a transição
+        });
+
+        closeAccountMenuBtn.addEventListener('click', () => {
+            accountMenuContent.classList.remove('open');
+            setTimeout(() => {
+                accountMenuOverlay.classList.add('hidden');
+            }, 300); // Combinar com a duração da transição
+        });
+
+        accountMenuOverlay.addEventListener('click', (e) => {
+            if (e.target === accountMenuOverlay) {
+                accountMenuContent.classList.remove('open');
+                setTimeout(() => {
+                    accountMenuOverlay.classList.add('hidden');
+                }, 300);
+            }
+        });
+
+        // Proteção de conteúdo e carregamento inicial
         document.addEventListener('DOMContentLoaded', () => {
-            if (!localStorage.getItem('loggedInUser')) {
+            const loggedInUser = localStorage.getItem('loggedInUser');
+            if (!loggedInUser) {
                 showMessage('Você precisa estar logado para acessar esta página.');
-                // Use a slight delay before redirecting to allow the message to be seen
                 setTimeout(() => {
                     window.location.href = 'index.html';
-                }, 1500); // 1.5 seconds delay
+                }, 1500); // 1.5 segundos de atraso
             } else {
-                document.getElementById('user-greeting').textContent = `Bem-vindo, ${localStorage.getItem('loggedInUser')}!`;
+                userNameMenuEl.textContent = `Olá, ${loggedInUser}!`; // Atualiza o nome no menu
             }
         });
     </script>
