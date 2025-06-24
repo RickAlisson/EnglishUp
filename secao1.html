@@ -10,41 +10,150 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: 'Poppins', sans-serif; background-color: #F8F9FA; }
-        h1, .aula-text { font-family: 'Raleway', sans-serif; }
+        h1, h2, .aula-text { font-family: 'Raleway', sans-serif; }
         .primary-blue { background-color: #4A6DFF; }
         .primary-blue-text { color: #4A6DFF; }
-        .aula-circle { width: 150px; height: 150px; border: 10px solid #4A6DFF; transition: all 0.3s ease; }
-        .aula-circle:hover { transform: scale(1.1); background-color: #4A6DFF; color: white; }
+        /* Styles for custom message box */
+        .message-modal {
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+        }
+        .message-modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+        .message-modal-close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            color: #6B7280;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
     </style>
 </head>
 <body class="p-8 md:p-12">
+
+    <!-- Message Modal -->
+    <div id="message-modal" class="hidden message-modal">
+        <div class="message-modal-content">
+            <button id="close-message-modal" class="message-modal-close-btn">&times;</button>
+            <p id="message-text" class="text-lg text-gray-800"></p>
+            <button id="message-ok-btn" class="bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold mt-6 hover:bg-blue-600">OK</button>
+        </div>
+    </div>
+
     <script>
-        // Content protection
-        if (!localStorage.getItem('loggedInUser')) {
-            window.location.href = 'index.html';
+        // Get elements for the custom message modal
+        const messageModal = document.getElementById('message-modal');
+        const messageTextEl = document.getElementById('message-text');
+        const closeMessageModalBtn = document.getElementById('close-message-modal');
+        const messageOkBtn = document.getElementById('message-ok-btn');
+
+        // Function to display custom messages
+        function showMessage(message) {
+            messageTextEl.textContent = message;
+            messageModal.classList.remove('hidden');
         }
+
+        // Function to hide custom messages
+        function hideMessage() {
+            messageModal.classList.add('hidden');
+        }
+
+        // Event listeners for message modal
+        closeMessageModalBtn.addEventListener('click', hideMessage);
+        messageOkBtn.addEventListener('click', hideMessage);
+        messageModal.addEventListener('click', (e) => {
+            // Close if clicking outside the content
+            if (e.target === messageModal) {
+                hideMessage();
+            }
+        });
+
+        // Content protection
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!localStorage.getItem('loggedInUser')) {
+                showMessage('Você precisa estar logado para acessar esta página.');
+                // Use a slight delay before redirecting to allow the message to be seen
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500); // 1.5 seconds delay
+            }
+        });
     </script>
+
     <header class="mb-12">
-        <a href="licoes.html" class="text-gray-500 hover:text-gray-800 transition">← Voltar para Lições</a>
+        <a href="licoes.html" class="text-gray-500 hover:text-gray-800 transition flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Voltar para Lições
+        </a>
     </header>
 
     <main class="container mx-auto text-center">
         <h1 class="text-5xl font-extrabold text-gray-800 mb-4">Seção 1</h1>
         <p class="text-xl text-gray-600 mb-16">Aprenda a fazer pedidos e interagir em um restaurante.</p>
         
-        <div class="flex flex-col md:flex-row justify-center items-center gap-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- Aula 1 -->
-            <a href="secao1-aula1.html" class="aula-circle rounded-full flex items-center justify-center">
-                <span class="aula-text text-3xl font-extrabold primary-blue-text">AULA 01</span>
+            <a href="secao1-aula1.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col items-center justify-center text-center">
+                <div class="primary-blue text-white w-20 h-20 rounded-full flex items-center justify-center mb-4 text-3xl font-extrabold">01</div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Fazendo seu Pedido</h2>
+                <p class="text-gray-600">Vocabulário essencial e frases para pedir comida e bebida.</p>
             </a>
-            <!-- Aula 2 -->
-             <a href="#" class="aula-circle rounded-full flex items-center justify-center opacity-50 cursor-not-allowed">
-                <span class="aula-text text-3xl font-extrabold primary-blue-text">AULA 02</span>
-            </a>
-            <!-- Aula 3 -->
-             <a href="#" class="aula-circle rounded-full flex items-center justify-center opacity-50 cursor-not-allowed">
-                <span class="aula-text text-3xl font-extrabold primary-blue-text">AULA 03</span>
-            </a>
+            
+            <!-- Aula 2 - Bloqueada -->
+            <div class="bg-white p-6 rounded-xl shadow-lg opacity-50 cursor-not-allowed flex flex-col items-center justify-center text-center">
+                <div class="bg-gray-200 text-gray-500 w-20 h-20 rounded-full flex items-center justify-center mb-4 text-3xl font-extrabold">02</div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Interagindo com o Garçom</h2>
+                <p class="text-gray-600">Como se comunicar com a equipe do restaurante.</p>
+            </div>
+            
+            <!-- Aula 3 - Bloqueada -->
+            <div class="bg-white p-6 rounded-xl shadow-lg opacity-50 cursor-not-allowed flex flex-col items-center justify-center text-center">
+                <div class="bg-gray-200 text-gray-500 w-20 h-20 rounded-full flex items-center justify-center mb-4 text-3xl font-extrabold">03</div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Pagando a Conta</h2>
+                <p class="text-gray-600">Frases para pedir a conta e entender o valor.</p>
+            </div>
+
+            <!-- Aula 4 - Bloqueada (Nova) -->
+            <div class="bg-white p-6 rounded-xl shadow-lg opacity-50 cursor-not-allowed flex flex-col items-center justify-center text-center">
+                <div class="bg-gray-200 text-gray-500 w-20 h-20 rounded-full flex items-center justify-center mb-4 text-3xl font-extrabold">04</div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Especialidades e Restrições</h2>
+                <p class="text-gray-600">Como perguntar sobre pratos especiais e alergias.</p>
+            </div>
+
+            <!-- Aula 5 - Bloqueada (Nova) -->
+            <div class="bg-white p-6 rounded-xl shadow-lg opacity-50 cursor-not-allowed flex flex-col items-center justify-center text-center">
+                <div class="bg-gray-200 text-gray-500 w-20 h-20 rounded-full flex items-center justify-center mb-4 text-3xl font-extrabold">05</div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Reservas e Chegadas</h2>
+                <p class="text-gray-600">Termos para fazer e gerenciar reservas.</p>
+            </div>
+
+            <!-- Aula 6 - Bloqueada (Nova) -->
+            <div class="bg-white p-6 rounded-xl shadow-lg opacity-50 cursor-not-allowed flex flex-col items-center justify-center text-center">
+                <div class="bg-gray-200 text-gray-500 w-20 h-20 rounded-full flex items-center justify-center mb-4 text-3xl font-extrabold">06</div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Reclamações e Elogios</h2>
+                <p class="text-gray-600">Expressões para dar feedback no restaurante.</p>
+            </div>
         </div>
     </main>
 </body>
