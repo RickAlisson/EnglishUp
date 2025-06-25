@@ -47,8 +47,8 @@
             border: none;
             background: none;
         }
-        /* Estilos para o overlay do menu mobile */
-        .mobile-menu-overlay {
+        /* Estilos para o overlay do menu de conta */
+        .account-menu-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -59,10 +59,10 @@
             display: flex;
             justify-content: flex-end; /* Alinhar à direita para efeito de slide-in */
         }
-        .mobile-menu-content {
+        .account-menu-content {
             background-color: white;
-            width: 80%; /* Ajustar largura para menu mobile */
-            max-width: 300px; /* Largura máxima para menu mobile */
+            width: 80%; /* Ajustar largura para menu */
+            max-width: 300px; /* Largura máxima para menu */
             height: 100%;
             padding: 2rem;
             box-shadow: -4px 0 10px rgba(0,0,0,0.2);
@@ -70,8 +70,29 @@
             transform: translateX(100%); /* Começar fora da tela */
             transition: transform 0.3s ease-out; /* Slide-in suave */
         }
-        .mobile-menu-content.open {
+        .account-menu-content.open {
             transform: translateX(0); /* Deslizar para dentro */
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4A5568;
+            font-weight: 500;
+        }
+        .input-group input[type="text"],
+        .input-group input[type="email"],
+        .input-group input[type="password"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #CBD5E0;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            box-sizing: border-box; /* Para incluir padding e borda na largura total */
+        }
+        /* Garantir que o email longo quebre a linha */
+        #display-email {
+            overflow-wrap: break-word; /* Força a quebra de palavras longas */
         }
     </style>
 </head>
@@ -86,12 +107,115 @@
         </div>
     </div>
 
+    <header class="mb-12 flex justify-between items-center">
+        <a href="licoes.html" class="text-3xl font-bold primary-blue-text">EnglishUp</a>
+        <!-- Botão de menu da conta (sempre visível) -->
+        <div id="user-menu-container">
+            <button id="account-menu-toggle-btn" class="text-gray-700 p-2 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Overlay do Menu da Conta (Inicialmente oculto) -->
+    <div id="account-menu-overlay" class="hidden account-menu-overlay">
+        <div id="account-menu-content" class="account-menu-content">
+            <button id="close-account-menu" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
+            <h3 class="text-xl font-bold mb-6 text-center primary-blue-text">Minha Conta</h3>
+            <p id="user-name-menu" class="font-semibold text-gray-700 text-center mb-6"></p>
+            <ul class="mt-8 space-y-4 text-lg">
+                <li><a href="meu-perfil.html" class="block text-gray-700 hover:text-blue-500 p-2 rounded-lg">Meu Perfil</a></li>
+                <li><a href="#" class="block text-gray-700 hover:text-blue-500 p-2 rounded-lg">Configurações</a></li>
+                <li><a href="licoes.html" class="block text-gray-700 hover:text-blue-500 p-2 rounded-lg">Minhas Lições</a></li>
+            </ul>
+            <button id="logout-btn-menu" class="w-full text-red-500 border border-red-500 px-6 py-2 rounded-lg hover:bg-red-500 hover:text-white transition mt-8">Sair</button>
+        </div>
+    </div>
+
+    <main class="container mx-auto text-center">
+        <h1 class="text-5xl font-extrabold text-gray-800 mb-10">Meu Perfil</h1>
+        <div class="bg-white p-8 rounded-2xl shadow-lg w-full md:max-w-md mx-auto text-left"> <!-- Adicionado w-full e md:max-w-md -->
+            <!-- Modo de visualização -->
+            <div id="profile-display-mode">
+                <div class="mb-4">
+                    <p class="text-gray-600">Nome:</p>
+                    <p id="display-name" class="text-xl font-semibold text-gray-800"></p>
+                </div>
+                <div class="mb-6">
+                    <p class="text-gray-600">Email:</p>
+                    <p id="display-email" class="text-xl font-semibold text-gray-800"></p> <!-- Estilo de quebra de palavra aplicado no CSS -->
+                </div>
+                <button id="edit-profile-btn" class="primary-blue text-white px-6 py-2 rounded-lg font-semibold hover:opacity-90 transition shadow-lg mt-4 w-full">Editar Perfil</button>
+            </div>
+
+            <!-- Modo de edição -->
+            <form id="profile-edit-mode" class="hidden">
+                <div class="input-group mb-4">
+                    <label for="edit-name">Nome:</label>
+                    <input type="text" id="edit-name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
+                <div class="input-group mb-4">
+                    <label for="edit-email">Email:</label>
+                    <input type="email" id="edit-email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
+                <div class="input-group mb-4">
+                    <label for="current-password">Senha Atual (para confirmar alterações):</label>
+                    <input type="password" id="current-password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
+                <div class="input-group mb-4">
+                    <label for="new-password">Nova Senha (opcional):</label>
+                    <input type="password" id="new-password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
+                <div class="input-group mb-6">
+                    <label for="confirm-new-password">Confirmar Nova Senha:</label>
+                    <input type="password" id="confirm-new-password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                </div>
+                <div class="flex flex-col sm:flex-row justify-between space-y-4 sm:space-y-0 sm:space-x-4"> <!-- Ajustado para melhor responsividade dos botões -->
+                    <button type="button" id="cancel-edit-btn" class="secondary-gray text-gray-700 px-6 py-2 rounded-lg font-semibold hover:bg-gray-300 transition shadow-lg w-full sm:w-1/2">Cancelar</button>
+                    <button type="submit" id="save-profile-btn" class="primary-blue text-white px-6 py-2 rounded-lg font-semibold hover:opacity-90 transition shadow-lg w-full sm:w-1/2">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+        <a href="licoes.html" class="inline-block mt-8 text-gray-500 hover:text-gray-800 transition flex items-center justify-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Voltar para Lições
+        </a>
+    </main>
+
     <script>
         // Obter elementos para o modal de mensagem personalizado
         const messageModal = document.getElementById('message-modal');
         const messageTextEl = document.getElementById('message-text');
         const closeMessageModalBtn = document.getElementById('close-message-modal');
         const messageOkBtn = document.getElementById('message-ok-btn');
+
+        // Elementos do menu da conta
+        const accountMenuToggleBtn = document.getElementById('account-menu-toggle-btn');
+        const accountMenuOverlay = document.getElementById('account-menu-overlay');
+        const accountMenuContent = document.getElementById('account-menu-content');
+        const closeAccountMenuBtn = document.getElementById('close-account-menu');
+        const userNameMenuEl = document.getElementById('user-name-menu');
+        const logoutBtnMenu = document.getElementById('logout-btn-menu');
+
+        // Elementos do perfil
+        const profileDisplayName = document.getElementById('display-name');
+        const profileDisplayEmail = document.getElementById('display-email');
+        const profileDisplayMode = document.getElementById('profile-display-mode');
+        const profileEditMode = document.getElementById('profile-edit-mode');
+        const editProfileBtn = document.getElementById('edit-profile-btn');
+        const cancelEditBtn = document.getElementById('cancel-edit-btn');
+        const saveProfileBtn = document.getElementById('save-profile-btn');
+
+        // Campos de edição
+        const editNameInput = document.getElementById('edit-name');
+        const editEmailInput = document.getElementById('edit-email');
+        const currentPasswordInput = document.getElementById('current-password');
+        const newPasswordInput = document.getElementById('new-password');
+        const confirmNewPasswordInput = document.getElementById('confirm-new-password');
+
+        let currentUser = null; // Variável para armazenar o objeto do usuário logado
 
         // Função para exibir mensagens personalizadas
         function showMessage(message) {
@@ -108,27 +232,81 @@
         closeMessageModalBtn.addEventListener('click', hideMessage);
         messageOkBtn.addEventListener('click', hideMessage);
         messageModal.addEventListener('click', (e) => {
-            // Fechar se clicar fora do conteúdo
             if (e.target === messageModal) {
                 hideMessage();
             }
         });
 
-        // Proteção de conteúdo
+        // Lógica de logout
+        function performLogout() {
+            localStorage.removeItem('loggedInUser');
+            showMessage('Você foi desconectado.');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        }
+
+        logoutBtnMenu.addEventListener('click', performLogout);
+
+        // Lógica do menu da conta
+        accountMenuToggleBtn.addEventListener('click', () => {
+            accountMenuOverlay.classList.remove('hidden');
+            setTimeout(() => {
+                accountMenuContent.classList.add('open');
+            }, 10); // Pequeno atraso para a transição
+        });
+
+        closeAccountMenuBtn.addEventListener('click', () => {
+            accountMenuContent.classList.remove('open');
+            setTimeout(() => {
+                accountMenuOverlay.classList.add('hidden');
+            }, 300); // Combinar com a duração da transição
+        });
+
+        accountMenuOverlay.addEventListener('click', (e) => {
+            if (e.target === accountMenuOverlay) {
+                accountMenuContent.classList.remove('open');
+                setTimeout(() => {
+                    accountMenuOverlay.classList.add('hidden');
+                }, 300);
+            }
+        });
+
+        // Função para alternar o modo de edição do perfil
+        function toggleEditMode(isEditing) {
+            if (isEditing) {
+                profileDisplayMode.classList.add('hidden');
+                profileEditMode.classList.remove('hidden');
+                editNameInput.value = currentUser.name;
+                editEmailInput.value = currentUser.email;
+                currentPasswordInput.value = ''; // Limpa campos de senha ao entrar no modo de edição
+                newPasswordInput.value = '';
+                confirmNewPasswordInput.value = '';
+            } else {
+                profileDisplayMode.classList.remove('hidden');
+                profileEditMode.classList.add('hidden');
+                // Atualiza os dados exibidos após salvar ou cancelar
+                profileDisplayName.textContent = currentUser.name;
+                profileDisplayEmail.textContent = currentUser.email;
+            }
+        }
+
+        // Carregar dados do usuário e configurar o perfil
         document.addEventListener('DOMContentLoaded', () => {
-            if (!localStorage.getItem('loggedInUser')) {
+            const loggedInUserName = localStorage.getItem('loggedInUser');
+            if (!loggedInUserName) {
                 showMessage('Você precisa estar logado para acessar esta página.');
                 setTimeout(() => {
                     window.location.href = 'index.html';
-                }, 1500); // 1.5 segundos de atraso
+                }, 1500);
             } else {
-                const userName = localStorage.getItem('loggedInUser');
+                userNameMenuEl.textContent = `Olá, ${loggedInUserName}!`; // Atualiza o nome no menu
+
                 const users = JSON.parse(localStorage.getItem('users')) || [];
-                const currentUser = users.find(user => user.name === userName);
+                currentUser = users.find(user => user.name === loggedInUserName);
 
                 if (currentUser) {
-                    document.getElementById('profile-name').textContent = currentUser.name;
-                    document.getElementById('profile-email').textContent = currentUser.email;
+                    toggleEditMode(false); // Inicia no modo de visualização
                 } else {
                     showMessage('Dados do usuário não encontrados.');
                     setTimeout(() => {
@@ -138,115 +316,58 @@
             }
         });
 
-        // Lógica de logout (necessária para o menu mobile)
-        function performLogout() {
-            localStorage.removeItem('loggedInUser');
-            showMessage('Você foi desconectado.');
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 1500);
-        }
-        // Elementos do menu mobile para o script
-        const menuToggleBtn = document.getElementById('menu-toggle-btn');
-        const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
-        const mobileMenuContent = document.getElementById('mobile-menu-content');
-        const closeMobileMenuBtn = document.getElementById('close-mobile-menu');
-        const userNameMobileEl = document.getElementById('user-name-mobile');
-        const logoutBtnMobile = document.getElementById('logout-btn-mobile');
-        const logoutBtnDesktop = document.getElementById('logout-btn-desktop');
-        const userNameDesktopEl = document.getElementById('user-name-desktop');
+        // Event listeners para os botões de edição/salvar/cancelar
+        editProfileBtn.addEventListener('click', () => toggleEditMode(true));
+        cancelEditBtn.addEventListener('click', () => toggleEditMode(false));
 
+        profileEditMode.addEventListener('submit', (e) => {
+            e.preventDefault();
 
-        if(logoutBtnMobile) logoutBtnMobile.addEventListener('click', performLogout);
-        if(logoutBtnDesktop) logoutBtnDesktop.addEventListener('click', performLogout);
+            const newName = editNameInput.value.trim();
+            const newEmail = editEmailInput.value.trim();
+            const currentPassword = currentPasswordInput.value;
+            const newPassword = newPasswordInput.value;
+            const confirmNewPassword = confirmNewPasswordInput.value;
 
-        if(menuToggleBtn) {
-            menuToggleBtn.addEventListener('click', () => {
-                mobileMenuOverlay.classList.remove('hidden');
-                setTimeout(() => {
-                    mobileMenuContent.classList.add('open');
-                }, 10);
-            });
-        }
+            // 1. Validar senha atual
+            if (currentPassword !== currentUser.password) {
+                showMessage('Senha atual incorreta.');
+                return;
+            }
 
-        if(closeMobileMenuBtn) {
-            closeMobileMenuBtn.addEventListener('click', () => {
-                mobileMenuContent.classList.remove('open');
-                setTimeout(() => {
-                    mobileMenuOverlay.classList.add('hidden');
-                }, 300);
-            });
-        }
+            // 2. Validar nova senha (se estiver sendo alterada)
+            if (newPassword && newPassword !== confirmNewPassword) {
+                showMessage('Nova senha e confirmação não coincidem.');
+                return;
+            }
 
-        if(mobileMenuOverlay) {
-            mobileMenuOverlay.addEventListener('click', (e) => {
-                if (e.target === mobileMenuOverlay) {
-                    mobileMenuContent.classList.remove('open');
-                    setTimeout(() => {
-                        mobileMenuOverlay.classList.add('hidden');
-                    }, 300);
-                }
-            });
-        }
+            // 3. Verificar se o novo email já existe para outro usuário
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            const emailExists = users.some(user => user.email === newEmail && user.email !== currentUser.email); // Adicionado user.email !== currentUser.email para evitar falso positivo se for o próprio email
+            if (emailExists) {
+                showMessage('Este email já está em uso por outro usuário.');
+                return;
+            }
 
-        // Atualizar o nome do usuário no menu quando a página carrega
-        const loggedInUser = localStorage.getItem('loggedInUser');
-        if (loggedInUser) {
-            if(userNameDesktopEl) userNameDesktopEl.textContent = `Olá, ${loggedInUser}!`;
-            if(userNameMobileEl) userNameMobileEl.textContent = `Olá, ${loggedInUser}!`;
-        }
+            // 4. Atualizar dados do usuário
+            currentUser.name = newName;
+            currentUser.email = newEmail;
+            if (newPassword) { // Só atualiza a senha se um valor foi fornecido
+                currentUser.password = newPassword;
+            }
+
+            // Encontrar o índice do usuário no array e atualizar
+            const userIndex = users.findIndex(user => user.name === localStorage.getItem('loggedInUser'));
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('loggedInUser', currentUser.name); // Atualiza o nome de login se o nome foi alterado
+                showMessage('Perfil atualizado com sucesso!');
+                toggleEditMode(false); // Volta para o modo de visualização
+            } else {
+                showMessage('Erro ao encontrar usuário para atualizar.');
+            }
+        });
     </script>
-
-    <header class="mb-12 flex justify-between items-center">
-        <a href="licoes.html" class="text-3xl font-bold primary-blue-text">EnglishUp</a>
-        <!-- Informações do usuário e menu (Visíveis quando logado) -->
-        <div id="user-info" class="flex items-center space-x-4">
-            <!-- Menu Hamburger para telas pequenas -->
-            <button id="menu-toggle-btn" class="sm:hidden text-gray-700 p-2 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </button>
-
-            <!-- Info do usuário para telas grandes -->
-            <span id="user-name-desktop" class="font-semibold text-gray-700 hidden sm:block"></span>
-            <button id="logout-btn-desktop" class="text-red-500 hover:text-red-700 rounded-lg px-4 py-2 hidden sm:block">Sair</button>
-        </div>
-    </header>
-
-    <!-- Overlay do Menu Mobile (Inicialmente oculto) -->
-    <div id="mobile-menu-overlay" class="hidden mobile-menu-overlay">
-        <div id="mobile-menu-content" class="mobile-menu-content">
-            <button id="close-mobile-menu" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
-            <h3 class="text-xl font-bold mb-6 text-center primary-blue-text">Minha Conta</h3>
-            <p id="user-name-mobile" class="font-semibold text-gray-700 text-center mb-6"></p>
-            <button id="logout-btn-mobile" class="w-full text-red-500 border border-red-500 px-6 py-2 rounded-lg hover:bg-red-500 hover:text-white transition">Sair</button>
-            <ul class="mt-8 space-y-4 text-lg">
-                <li><a href="meu-perfil.html" class="block text-gray-700 hover:text-blue-500">Meu Perfil</a></li>
-                <li><a href="#" class="block text-gray-700 hover:text-blue-500">Configurações</a></li>
-                <li><a href="licoes.html" class="block text-gray-700 hover:text-blue-500">Minhas Lições</a></li>
-            </ul>
-        </div>
-    </div>
-
-    <main class="container mx-auto text-center">
-        <h1 class="text-5xl font-extrabold text-gray-800 mb-10">Meu Perfil</h1>
-        <div class="bg-white p-8 rounded-2xl shadow-lg max-w-md mx-auto text-left">
-            <div class="mb-4">
-                <p class="text-gray-600">Nome:</p>
-                <p id="profile-name" class="text-xl font-semibold text-gray-800"></p>
-            </div>
-            <div>
-                <p class="text-gray-600">Email:</p>
-                <p id="profile-email" class="text-xl font-semibold text-gray-800"></p>
-            </div>
-            <!-- Botão para editar perfil ou outras opções futuras -->
-            <button class="primary-blue text-white px-6 py-2 rounded-lg font-semibold hover:opacity-90 transition shadow-lg mt-8 w-full">Editar Perfil</button>
-        </div>
-        <a href="licoes.html" class="inline-block mt-8 text-gray-500 hover:text-gray-800 transition flex items-center justify-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Voltar para Lições
-        </a>
-    </main>
 </body>
 </html>
