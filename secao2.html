@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seção 2 - EnglishUp</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Raleway:wght@800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #F8F9FA; color: #333; }
+        h1, h2, .aula-text { font-family: 'Raleway', sans-serif; }
+        .primary-blue { background-color: #4A6DFF; }
+        .primary-blue-text { color: #4A6DFF; }
+        .secondary-gray { background-color: #E9ECEF; }
+        /* Estilos para o modal de mensagem */
+        .message-modal {
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+        }
+        .message-modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+        .message-modal-close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            color: #6B7280;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+        /* Estilos para o overlay do menu de conta */
+        .account-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 40;
+            display: flex;
+            justify-content: flex-end; /* Alinhar à direita para efeito de slide-in */
+        }
+        .account-menu-content {
+            background-color: white;
+            width: 80%; /* Ajustar largura para menu */
+            max-width: 300px; /* Largura máxima para menu */
+            height: 100%;
+            padding: 2rem;
+            box-shadow: -4px 0 10px rgba(0,0,0,0.2);
+            position: relative;
+            transform: translateX(100%); /* Começar fora da tela */
+            transition: transform 0.3s ease-out; /* Slide-in suave */
+        }
+        .account-menu-content.open {
+            transform: translateX(0); /* Deslizar para dentro */
+        }
+    </style>
+</head>
+<body class="p-8 md:p-12">
+
+    <!-- Modal de Mensagem -->
+    <div id="message-modal" class="hidden message-modal">
+        <div class="message-modal-content">
+            <button id="close-message-modal" class="message-modal-close-btn">&times;</button>
+            <p id="message-text" class="text-lg text-gray-800"></p>
+            <button id="message-ok-btn" class="bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold mt-6 hover:bg-blue-600">OK</button>
+        </div>
+    </div>
+
+    <script>
+        // Obter elementos para o modal de mensagem personalizado
+        const messageModal = document.getElementById('message-modal');
+        const messageTextEl = document.getElementById('message-text');
+        const closeMessageModalBtn = document.getElementById('close-message-modal');
+        const messageOkBtn = document.getElementById('message-ok-btn');
+
+        // Função para exibir mensagens personalizadas
+        function showMessage(message) {
+            messageTextEl.textContent = message;
+            messageModal.classList.remove('hidden');
+        }
+
+        // Função para ocultar mensagens personalizadas
+        function hideMessage() {
+            messageModal.classList.add('hidden');
+        }
+
+        // Listeners de eventos para o modal de mensagem
+        closeMessageModalBtn.addEventListener('click', hideMessage);
+        messageOkBtn.addEventListener('click', hideMessage);
+        messageModal.addEventListener('click', (e) => {
+            // Fechar se clicar fora do conteúdo
+            if (e.target === messageModal) {
+                hideMessage();
+            }
+        });
+
+        // Lógica de logout (necessária para o menu da conta)
+        function performLogout() {
+            localStorage.removeItem('loggedInUser');
+            showMessage('Você foi desconectado.');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        }
+
+        // Elementos do menu da conta
+        const accountMenuToggleBtn = document.getElementById('account-menu-toggle-btn');
+        const accountMenuOverlay = document.getElementById('account-menu-overlay');
+        const accountMenuContent = document.getElementById('account-menu-content');
+        const closeAccountMenuBtn = document.getElementById('close-account-menu');
+        const userNameMenuEl = document.getElementById('user-name-menu');
+        const logoutBtnMenu = document.getElementById('logout-btn-menu');
+
+
+        if (logoutBtnMenu) logoutBtnMenu.addEventListener('click', performLogout);
+
+        if (accountMenuToggleBtn) {
+            accountMenuToggleBtn.addEventListener('click', () => {
+                accountMenuOverlay.classList.remove('hidden');
+                setTimeout(() => {
+                    accountMenuContent.classList.add('open');
+                }, 10);
+            });
+        }
+
+        if (closeAccountMenuBtn) {
+            closeAccountMenuBtn.addEventListener('click', () => {
+                accountMenuContent.classList.remove('open');
+                setTimeout(() => {
+                    accountMenuOverlay.classList.add('hidden');
+                }, 300);
+            });
+        }
+
+        if (accountMenuOverlay) {
+            accountMenuOverlay.addEventListener('click', (e) => {
+                if (e.target === accountMenuOverlay) {
+                    accountMenuContent.classList.remove('open');
+                    setTimeout(() => {
+                        accountMenuOverlay.classList.add('hidden');
+                    }, 300);
+                }
+            });
+        }
+
+        // Proteção de conteúdo e carregamento inicial
+        document.addEventListener('DOMContentLoaded', () => {
+            const loggedInUser = localStorage.getItem('loggedInUser');
+            if (!loggedInUser) {
+                showMessage('Você precisa estar logado para acessar esta página.');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500); // 1.5 segundos de atraso
+            } else {
+                if (userNameMenuEl) userNameMenuEl.textContent = `Olá, ${loggedInUser}!`; // Atualiza o nome no menu
+            }
+        });
+    </script>
+
+    <header class="mb-12 flex justify-between items-center">
+        <a href="licoes.html" class="text-3xl font-bold primary-blue-text">EnglishUp</a>
+        
+        <!-- Botão de menu da conta (sempre visível) -->
+        <div id="user-menu-container">
+            <button id="account-menu-toggle-btn" class="text-gray-700 p-2 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Overlay do Menu da Conta (Inicialmente oculto) -->
+    <div id="account-menu-overlay" class="hidden account-menu-overlay">
+        <div id="account-menu-content" class="account-menu-content">
+            <button id="close-account-menu" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
+            <h3 class="text-xl font-bold mb-6 text-center primary-blue-text">Minha Conta</h3>
+            <p id="user-name-menu" class="font-semibold text-gray-700 text-center mb-6"></p>
+            <ul class="mt-8 space-y-4 text-lg">
+                <li><a href="meu-perfil.html" class="block text-gray-700 hover:text-blue-500 p-2 rounded-lg">Meu Perfil</a></li>
+                <li><a href="#" class="block text-gray-700 hover:text-blue-500 p-2 rounded-lg">Configurações</a></li>
+                <li><a href="licoes.html" class="block text-gray-700 hover:text-blue-500 p-2 rounded-lg">Minhas Lições</a></li>
+            </ul>
+            <button id="logout-btn-menu" class="w-full text-red-500 border border-red-500 px-6 py-2 rounded-lg hover:bg-red-500 hover:text-white transition mt-8">Sair</button>
+        </div>
+    </div>
+
+    <main class="container mx-auto text-center">
+        <h1 class="text-5xl font-extrabold text-gray-800 mb-4">Seção 2</h1>
+        <p class="text-xl text-gray-600 mb-16">Comunicação essencial para fazer compras.</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Aula 1: No Supermercado -->
+            <a href="secao2-aula1.html" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col items-center justify-center text-center">
+                <div class="primary-blue text-white w-20 h-20 rounded-full flex items-center justify-center mb-4 text-3xl font-extrabold">01</div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">No Supermercado</h2>
+                <p class="text-gray-600">Vocabulário de produtos e como perguntar preços.</p>
+            </a>
+            
+            <!-- Aula 2: Roupas e Acessórios - Bloqueada -->
+            <div class="bg-white p-6 rounded-xl shadow-lg opacity-50 cursor-not-allowed flex flex-col items-center justify-center text-center">
+                <div class="bg-gray-200 text-gray-500 w-20 h-20 rounded-full flex items-center justify-center mb-4 text-3xl font-extrabold">02</div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Roupas e Acessórios</h2>
+                <p class="text-gray-600">Termos para tamanhos, cores e como provar roupas.</p>
+            </div>
+            
+            <!-- Aula 3: Pagamento e Caixas - Bloqueada -->
+            <div class="bg-white p-6 rounded-xl shadow-lg opacity-50 cursor-not-allowed flex flex-col items-center justify-center text-center">
+                <div class="bg-gray-200 text-gray-500 w-20 h-20 rounded-full flex items-center justify-center mb-4 text-3xl font-extrabold">03</div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Pagamento e Caixas</h2>
+                <p class="text-gray-600">Frases para pagar, pedir nota fiscal e troco.</p>
+            </div>
+
+            <!-- Aula 4: Lojas de Eletrônicos - Bloqueada -->
+            <div class="bg-white p-6 rounded-xl shadow-lg opacity-50 cursor-not-allowed flex flex-col items-center justify-center text-center">
+                <div class="bg-gray-200 text-gray-500 w-20 h-20 rounded-full flex items-center justify-center mb-4 text-3xl font-extrabold">04</div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Lojas de Eletrônicos</h2>
+                <p class="text-gray-600">Vocabulário de tecnologia e como pedir ajuda.</p>
+            </div>
+
+            <!-- Aula 5: Barganhar e Descontos - Bloqueada -->
+            <div class="bg-white p-6 rounded-xl shadow-lg opacity-50 cursor-not-allowed flex flex-col items-center justify-center text-center">
+                <div class="bg-gray-200 text-gray-500 w-20 h-20 rounded-full flex items-center justify-center mb-4 text-3xl font-extrabold">05</div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Barganhar e Descontos</h2>
+                <p class="text-gray-600">Expressões para negociar preços e pedir descontos.</p>
+            </div>
+
+            <!-- Aula 6: Devoluções e Trocas - Bloqueada -->
+            <div class="bg-white p-6 rounded-xl shadow-lg opacity-50 cursor-not-allowed flex flex-col items-center justify-center text-center">
+                <div class="bg-gray-200 text-gray-500 w-20 h-20 rounded-full flex items-center justify-center mb-4 text-3xl font-extrabold">06</div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Devoluções e Trocas</h2>
+                <p class="text-gray-600">Como lidar com produtos defeituosos ou trocas.</p>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
