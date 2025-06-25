@@ -17,7 +17,7 @@
         .wrong-answer { background-color: #DC3545 !important; }
         .answer-card { transition: all 0.2s ease-in-out; }
         .answer-card:not(:disabled):hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
-        /* Styles for custom message box */
+        /* Estilos para o modal de mensagem */
         .message-modal {
             background-color: rgba(0, 0, 0, 0.6);
             display: flex;
@@ -54,7 +54,7 @@
 </head>
 <body class="flex flex-col justify-center items-center min-h-screen p-4">
 
-    <!-- Message Modal -->
+    <!-- Modal de Mensagem -->
     <div id="message-modal" class="hidden message-modal">
         <div class="message-modal-content">
             <button id="close-message-modal" class="message-modal-close-btn">&times;</button>
@@ -64,47 +64,47 @@
     </div>
 
     <script>
-        // Get elements for the custom message modal
+        // Obter elementos para o modal de mensagem personalizado
         const messageModal = document.getElementById('message-modal');
         const messageTextEl = document.getElementById('message-text');
         const closeMessageModalBtn = document.getElementById('close-message-modal');
         const messageOkBtn = document.getElementById('message-ok-btn');
 
-        // Function to display custom messages
+        // Função para exibir mensagens personalizadas
         function showMessage(message) {
             messageTextEl.textContent = message;
             messageModal.classList.remove('hidden');
         }
 
-        // Function to hide custom messages
+        // Função para ocultar mensagens personalizadas
         function hideMessage() {
             messageModal.classList.add('hidden');
         }
 
-        // Event listeners for message modal
+        // Listeners de eventos para o modal de mensagem
         closeMessageModalBtn.addEventListener('click', hideMessage);
         messageOkBtn.addEventListener('click', hideMessage);
         messageModal.addEventListener('click', (e) => {
-            // Close if clicking outside the content
+            // Fechar se clicar fora do conteúdo
             if (e.target === messageModal) {
                 hideMessage();
             }
         });
 
-        // Content protection
+        // Proteção de conteúdo
         document.addEventListener('DOMContentLoaded', () => {
             if (!localStorage.getItem('loggedInUser')) {
                 showMessage('Você precisa estar logado para acessar esta página.');
-                // Use a slight delay before redirecting to allow the message to be seen
+                // Usar um pequeno atraso antes de redirecionar para permitir que a mensagem seja vista
                 setTimeout(() => {
                     window.location.href = 'index.html';
-                }, 1500); // 1.5 seconds delay
+                }, 1500); // 1.5 segundos de atraso
             }
         });
     </script>
 
-    <div id="quiz-container" class="w-full max-w-3xl"> <!-- Changed max-w-2xl to max-w-3xl -->
-        <!-- Header da Questão -->
+    <div id="quiz-container" class="w-full max-w-3xl">
+        <!-- Cabeçalho da Questão -->
         <header class="flex justify-between items-center mb-8">
             <a href="secao1.html" class="text-gray-500 hover:text-gray-800 transition flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -157,7 +157,7 @@
 
 
     <script>
-        // Data for quiz questions and answers
+        // Dados para as perguntas e respostas do quiz
         const quizData = [
             { question: "Como você pediria para ver o cardápio em inglês?", options: ["The bill, please.", "Can I see the menu, please?", "I'd like to book a table.", "What's the special today?"], answer: "Can I see the menu, please?" },
             { question: "Qual a frase para pedir a conta?", options: ["I want to pay.", "Check, please.", "I'm finished.", "Could I have the bill, please?"], answer: "Could I have the bill, please?" },
@@ -171,9 +171,9 @@
 
         let currentQuestionIndex = 0;
         let lives = 3;
-        let answered = false; // Flag to check if the current question has been answered
+        let answered = false; // Flag para verificar se a questão atual foi respondida
 
-        // Get DOM elements
+        // Obter elementos do DOM
         const questionCounter = document.getElementById('question-counter');
         const livesCounter = document.getElementById('lives');
         const questionTitle = document.getElementById('question-title');
@@ -184,114 +184,126 @@
         const gameOverScreen = document.getElementById('game-over-screen');
 
         /**
-         * Shuffles an array in place (Fisher-Yates algorithm).
-         * @param {Array} array The array to shuffle.
+         * Embaralha um array no lugar (algoritmo de Fisher-Yates).
+         * @param {Array} array O array a ser embaralhado.
          */
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+                [array[i], array[j]] = [array[j], array[i]]; // Troca elementos
             }
         }
 
         /**
-         * Loads the current question and its options into the quiz interface.
+         * Carrega a questão atual e suas opções na interface do quiz.
          */
         function loadQuestion() {
-            answered = false; // Reset answered flag for the new question
+            answered = false; // Reinicia a flag de resposta para a nova questão
             const currentQuestion = quizData[currentQuestionIndex];
             
-            // Update question counter
+            // Atualiza o contador de questões
             questionCounter.textContent = `#${(currentQuestionIndex + 1).toString().padStart(2, '0')}`;
-            // Set question title
+            // Define o título da questão
             questionTitle.textContent = currentQuestion.question;
-            // Clear previous answers
+            // Limpa as respostas anteriores
             answersGrid.innerHTML = '';
 
-            // Shuffle options before displaying them
-            const shuffledOptions = [...currentQuestion.options]; // Create a copy to shuffle
+            // Embaralha as opções antes de exibi-las
+            const shuffledOptions = [...currentQuestion.options]; // Cria uma cópia para embaralhar
             shuffleArray(shuffledOptions);
 
-            // Create and append buttons for each option
+            // Cria e adiciona botões para cada opção
             shuffledOptions.forEach(option => {
                 const button = document.createElement('button');
                 button.textContent = option;
-                // Add Tailwind CSS classes for styling
+                // Adiciona classes Tailwind CSS para estilização
                 button.classList.add('answer-card', 'p-6', 'rounded-lg', 'font-semibold', 'bg-white', 'shadow');
-                // Attach click event listener
+                // Anexa o listener de evento de clique
                 button.onclick = () => selectAnswer(button, option, currentQuestion.answer);
                 answersGrid.appendChild(button);
             });
             
-            // Disable and reset style of the "Next" button
+            // Desabilita e redefine o estilo do botão "Próximo"
             nextButton.classList.add('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
             nextButton.classList.remove('primary-blue', 'text-white');
             nextButton.disabled = true;
         }
 
         /**
-         * Handles the user's answer selection.
-         * @param {HTMLElement} button The button element that was clicked.
-         * @param {string} selectedOption The text content of the selected option.
-         * @param {string} correctAnswer The correct answer for the current question.
+         * Lida com a seleção de resposta do usuário.
+         * @param {HTMLElement} button O elemento do botão que foi clicado.
+         * @param {string} selectedOption O conteúdo de texto da opção selecionada.
+         * @param {string} correctAnswer A resposta correta para a questão atual.
          */
         function selectAnswer(button, selectedOption, correctAnswer) {
-            if (answered) return; // Prevent multiple selections for the same question
-            answered = true; // Mark question as answered
+            if (answered) return; // Impede múltiplas seleções para a mesma questão
+            answered = true; // Marca a questão como respondida
             
-            // Disable all answer buttons to prevent further clicks
+            // Desabilita todos os botões de resposta para impedir cliques adicionais
             const allButtons = answersGrid.querySelectorAll('button');
             allButtons.forEach(btn => btn.disabled = true);    
 
             if (selectedOption !== correctAnswer) {
-                // If answer is wrong
-                button.classList.add('wrong-answer', 'text-white'); // Highlight wrong answer
+                // Se a resposta estiver errada
+                button.classList.add('wrong-answer', 'text-white'); // Destaca a resposta errada
                 
-                // Highlight the correct answer
+                // Destaca a resposta correta
                 allButtons.forEach(btn => {
                     if (btn.textContent === correctAnswer) {
                         btn.classList.add('correct-answer', 'text-white');
                     }
                 });
 
-                lives--; // Decrease lives
-                livesCounter.textContent = lives; // Update lives display
+                lives--; // Diminui as vidas
+                livesCounter.textContent = lives; // Atualiza a exibição das vidas
                 
-                // Check for game over
+                // Verifica se o jogo acabou
                 if (lives === 0) {
                     setTimeout(() => {
-                        quizContainer.classList.add('hidden'); // Hide quiz
-                        gameOverScreen.classList.remove('hidden'); // Show game over screen
-                    }, 1200); // Delay to allow user to see correct/wrong answers
-                    return; // Stop execution
+                        quizContainer.classList.add('hidden'); // Oculta o quiz
+                        gameOverScreen.classList.remove('hidden'); // Exibe a tela de game over
+                    }, 1200); // Atraso para permitir que o usuário veja as respostas
+                    return; // Interrompe a execução
                 }
 
             } else {
-                // If answer is correct
-                button.classList.add('correct-answer', 'text-white'); // Highlight correct answer
+                // Se a resposta estiver correta
+                button.classList.add('correct-answer', 'text-white'); // Destaca a resposta correta
             }
             
-            // Enable and style the "Next" button
+            // Habilita e estiliza o botão "Próximo"
             nextButton.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
             nextButton.classList.add('primary-blue', 'text-white');
             nextButton.disabled = false;
         }
         
-        // Event listener for the "Next" button
+        // Listener de evento para o botão "Próximo"
         nextButton.addEventListener('click', () => {
-            if (nextButton.disabled) return; // Do nothing if button is disabled
+            if (nextButton.disabled) return; // Não faz nada se o botão estiver desabilitado
 
-            currentQuestionIndex++; // Move to the next question
+            currentQuestionIndex++; // Avança para a próxima questão
             if (currentQuestionIndex < quizData.length) {
-                loadQuestion(); // Load the next question
+                loadQuestion(); // Carrega a próxima questão
             } else {
-                // All questions answered, show completion screen
+                // Todas as questões respondidas, mostra a tela de conclusão
+                markLessonAsCompleted('secao1-aula1'); // Marca a aula como concluída
                 quizContainer.classList.add('hidden');
                 completionScreen.classList.remove('hidden');
             }
         });
 
-        // Initial load of the first question when the page loads
+        /**
+         * Marca uma aula como concluída no localStorage.
+         * @param {string} lessonId O ID único da aula (ex: 'secao1-aula1').
+         */
+        function markLessonAsCompleted(lessonId) {
+            let completedLessons = JSON.parse(localStorage.getItem('completedLessons') || '{}');
+            completedLessons[lessonId] = true;
+            localStorage.setItem('completedLessons', JSON.stringify(completedLessons));
+            console.log(`Aula ${lessonId} marcada como concluída!`);
+        }
+
+        // Carregamento inicial da primeira questão quando a página carrega
         loadQuestion();
     </script>
 </body>
