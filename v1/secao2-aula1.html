@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aula 1 - Seção 1 - EnglishUp</title>
+    <title>Aula 1 - Seção 2 - EnglishUp</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Raleway:wght@700;800&display=swap" rel="stylesheet">
@@ -198,7 +198,7 @@
     <div id="quiz-container" class="w-full max-w-3xl">
         <!-- Cabeçalho da Questão -->
         <header class="flex justify-between items-center mb-8">
-            <a href="secao1.html" class="text-gray-500 hover:text-gray-800 transition flex items-center gap-2">
+            <a href="secao2.html" class="text-gray-500 hover:text-gray-800 transition flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
@@ -230,10 +230,10 @@
     <!-- Tela de Conclusão (escondida por padrão) -->
     <div id="completion-screen" class="w-full max-w-2xl text-center hidden">
         <h1 class="text-5xl font-extrabold text-gray-800 mb-4">Parabéns!</h1>
-        <p class="text-xl text-gray-600 mb-8">Você completou a Aula 1 da Seção 1.</p>
+        <p class="text-xl text-gray-600 mb-8">Você completou a Aula 1 da Seção 2.</p>
         <div class="flex justify-center space-x-4">
-            <a href="secao1-aula1.html" class="primary-blue text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition shadow-lg">Refazer Aula</a>
-            <a href="secao1.html" class="secondary-gray text-gray-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-300 transition shadow-lg">Voltar para Seção</a>
+            <a href="secao2-aula1.html" class="primary-blue text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition shadow-lg">Refazer Aula</a>
+            <a href="secao2.html" class="secondary-gray text-gray-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-300 transition shadow-lg">Voltar para Seção</a>
         </div>
     </div>
 
@@ -242,8 +242,8 @@
         <h1 class="text-5xl font-extrabold text-red-500 mb-4">Game Over</h1>
         <p class="text-xl text-gray-600 mb-8">Você não tem mais vidas.</p>
         <div class="flex justify-center space-x-4">
-            <a href="secao1-aula1.html" class="primary-blue text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition shadow-lg">Tentar Novamente</a>
-            <a href="secao1.html" class="secondary-gray text-gray-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-300 transition shadow-lg">Voltar para Seção</a>
+            <a href="secao2-aula1.html" class="primary-blue text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition shadow-lg">Tentar Novamente</a>
+            <a href="secao2.html" class="secondary-gray text-gray-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-300 transition shadow-lg">Voltar para Seção</a>
         </div>
     </div>
 
@@ -251,14 +251,14 @@
     <script>
         // Dados para as perguntas e respostas do quiz
         const quizData = [
-            { question: "Como você pediria para ver o cardápio em inglês?", options: ["The bill, please.", "Can I see the menu, please?", "I'd like to book a table.", "What's the special today?"], answer: "Can I see the menu, please?" },
-            { question: "Qual a frase para pedir a conta?", options: ["I want to pay.", "Check, please.", "I'm finished.", "Could I have the bill, please?"], answer: "Could I have the bill, please?" },
-            { question: "O que é um 'main course'?", options: ["A sobremesa.", "A entrada.", "O prato principal.", "A bebida."], answer: "O prato principal." },
-            { question: "Qual a tradução de 'waiter'?", options: ["Cozinheiro", "Garçom", "Cliente", "Gerente"], answer: "Garçom" },
-            { question: "Como você diria 'Está delicioso!' sobre a comida?", options: ["It's awful!", "It's cold.", "It's delicious!", "It's too salty."], answer: "It's delicious!" },
-            { question: "O que significa 'tip' em um restaurante?", options: ["Uma dica.", "Uma gorjeta.", "O topo.", "Um tipo de comida."], answer: "Uma gorjeta." },
-            { question: "Qual a palavra para 'bebida'?", options: ["Food", "Dessert", "Drink", "Appetizer"], answer: "Drink" },
-            { question: "Você quer saber se o restaurante tem opções vegetarianas. Como perguntaria?", options: ["Do you have any meat dishes?", "Are there vegan options?", "Do you serve seafood?", "Do you have vegetarian options?"], answer: "Do you have vegetarian options?" }
+            { question: "Como você perguntaria 'Onde fica o caixa?' no supermercado?", options: ["Where is the checkout?", "Where is the produce?", "Where is the deli?", "Where is the bakery?"], answer: "Where is the checkout?" },
+            { question: "Qual a palavra em inglês para 'carrinho de compras'?", options: ["Basket", "Trolley", "Bag", "Cart"], answer: "Cart" }, // Note: Trolley também é usado em inglês britânico. 'Cart' é mais comum nos EUA.
+            { question: "Você precisa de 'frutas e vegetais'. Onde você os encontraria?", options: ["Bakery section", "Dairy aisle", "Produce section", "Frozen foods"], answer: "Produce section" },
+            { question: "Como você perguntaria se um produto está em promoção?", options: ["Is this full price?", "Is this on sale?", "Is this expensive?", "Is this new?"], answer: "Is this on sale?" },
+            { question: "Qual a tradução para 'mercearia' (geral)?", options: ["Grocery store", "Department store", "Hardware store", "Bookstore"], answer: "Grocery store" },
+            { question: "Você quer pedir ajuda para encontrar um item. O que você diria?", options: ["I'm lost.", "Can you help me find this?", "I need directions.", "Where am I?"], answer: "Can you help me find this?" },
+            { question: "O que é 'aisle' em um supermercado?", options: ["Corredor", "Prateleira", "Caixa", "Entrada"], answer: "Corredor" },
+            { question: "Como você diria 'Preciso de um recibo, por favor.'?", options: ["I need a ticket, please.", "I want a bill, please.", "I need a receipt, please.", "I'd like a check, please."], answer: "I need a receipt, please." }
         ];
 
         let currentQuestionIndex = 0;
@@ -378,7 +378,7 @@
                 loadQuestion(); // Carrega a próxima questão
             } else {
                 // Todas as questões respondidas, mostra a tela de conclusão
-                markLessonAsCompleted('secao1-aula1'); // Marca a aula como concluída e adiciona XP
+                markLessonAsCompleted('secao2-aula1'); // Marca a aula como concluída e adiciona XP
                 quizContainer.classList.add('hidden');
                 completionScreen.classList.remove('hidden');
             }
