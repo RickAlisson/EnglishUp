@@ -45,7 +45,7 @@
             border: none;
             background: none;
         }
-        /* Estilos para o overlay do menu mobile (agora usado em todas as telas para o menu de conta) */
+        /* Estilos para o overlay do menu de conta */
         .account-menu-overlay {
             position: fixed;
             top: 0;
@@ -66,10 +66,26 @@
             box-shadow: -4px 0 10px rgba(0,0,0,0.2);
             position: relative;
             transform: translateX(100%); /* Começar fora da tela */
-            transition: transform 0.3s ease-out; /* Slide-in suave */
+            transition: transform 0.3s ease-out; /* Smooth slide-in */
         }
         .account-menu-content.open {
-            transform: translateX(0); /* Deslizar para dentro */
+            transform: translateX(0); /* Slide in */
+        }
+        /* Estilos para a barra de progresso XP */
+        .progress-bar-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 9999px; /* Tailwind's rounded-full */
+            height: 10px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #4A6DFF; /* primary-blue */
+            width: 0%;
+            border-radius: 9999px; /* Tailwind's rounded-full */
+            transition: width 0.5s ease-in-out;
         }
     </style>
 </head>
@@ -99,14 +115,33 @@
     <div id="account-menu-overlay" class="hidden account-menu-overlay">
         <div id="account-menu-content" class="account-menu-content">
             <button id="close-account-menu" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
-            <h3 class="text-xl font-bold mb-6 text-center primary-blue-text">Minha Conta</h3>
-            <p id="user-name-menu" class="font-semibold text-gray-700 text-center mb-6"></p>
-            <ul class="mt-8 space-y-4 text-lg">
-                <li><a href="meu-perfil.html" class="block text-gray-700 hover:text-blue-500 p-2 rounded-lg">Meu Perfil</a></li>
-                <li><a href="#" class="block text-gray-700 hover:text-blue-500 p-2 rounded-lg">Configurações</a></li>
-                <li><a href="licoes.html" class="block text-gray-700 hover:text-blue-500 p-2 rounded-lg">Minhas Lições</a></li>
-            </ul>
-            <button id="logout-btn-menu" class="w-full text-red-500 border border-red-500 px-6 py-2 rounded-lg hover:bg-red-500 hover:text-white transition mt-8">Sair</button>
+            <h3 class="text-xl font-bold mb-6 text-center primary-blue-text">Conta</h3>
+            
+            <!-- Conteúdo do menu para USUÁRIOS LOGADOS -->
+            <div id="logged-in-menu-options" class="hidden"> <!-- Adicionado hidden por padrão para controle JS -->
+                <p id="user-name-menu" class="font-semibold text-gray-700 text-center mb-6"></p>
+                <!-- Barra de Progresso XP -->
+                <div class="mb-4 text-center">
+                    <p class="text-sm text-gray-600">Nível <span id="user-level-menu">1</span></p>
+                    <div class="progress-bar-container">
+                        <div id="xp-progress-bar" class="progress-bar"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1"><span id="current-xp-menu">0</span>/<span id="next-level-xp-menu">100</span> XP</p>
+                </div>
+
+                <ul class="mt-8 space-y-4 text-lg">
+                    <li><a href="meu-perfil.html" class="block text-gray-700 hover:text-blue-500 p-2 rounded-lg">Meu Perfil</a></li>
+                    <li><a href="licoes.html" class="block text-gray-700 hover:text-blue-500 p-2 rounded-lg">Minhas Lições</a></li>
+                </ul>
+                <button id="logout-btn-menu" class="w-full text-red-500 border border-red-500 px-6 py-2 rounded-lg hover:bg-red-500 hover:text-white transition mt-8">Sair</button>
+            </div>
+
+            <!-- Conteúdo do menu para USUÁRIOS NÃO LOGADOS -->
+            <div id="logged-out-menu-options" class="hidden"> <!-- Adicionado hidden por padrão para controle JS -->
+                <p class="text-gray-700 text-center mb-6">Bem-vindo(a)!</p>
+                <button id="menu-login-btn" class="w-full bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition mb-4">Entrar</button>
+                <button id="menu-register-btn" class="w-full text-blue-500 border border-blue-500 px-6 py-2 rounded-lg hover:bg-blue-500 hover:text-white transition">Cadastrar-se</button>
+            </div>
         </div>
     </div>
 
@@ -125,7 +160,7 @@
                     </svg>
                 </div>
             </a>
-            <!-- Seção 2 - Agora clicável -->
+            <!-- Seção 2 -->
             <a href="secao2.html" class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex justify-between items-center">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800 mb-2">Seção 2: Compras</h2>
@@ -137,7 +172,7 @@
                     </svg>
                 </div>
             </a>
-            <!-- Seção 3 - Agora clicável -->
+            <!-- Seção 3 -->
             <a href="secao3.html" class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex justify-between items-center">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-800 mb-2">Seção 3: No Aeroporto</h2>
@@ -233,58 +268,120 @@
                     </svg>
                 </div>
             </div>
-            <!-- Seção 11 -->
-            <div class="bg-white p-8 rounded-2xl shadow-lg flex justify-between items-center opacity-50 cursor-not-allowed">
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Seção 11: Meio Ambiente</h2>
-                    <p class="text-gray-600">Discuta sobre sustentabilidade e natureza.</p>
-                </div>
-                <div class="bg-gray-100 p-3 rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                </div>
-            </div>
-            <!-- Seção 12 -->
-            <div class="bg-white p-8 rounded-2xl shadow-lg flex justify-between items-center opacity-50 cursor-not-allowed">
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Seção 12: Cozinha e Alimentação</h2>
-                    <p class="text-gray-600">Receitas, ingredientes e conversas sobre comida.</p>
-                </div>
-                <div class="bg-gray-100 p-3 rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                </div>
-            </div>
-            <!-- Seção 13 -->
-            <div class="bg-white p-8 rounded-2xl shadow-lg flex justify-between items-center opacity-50 cursor-not-allowed">
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Seção 13: Notícias e Eventos Atuais</h2>
-                    <p class="text-gray-600">Mantenha-se atualizado e discuta os acontecimentos.</p>
-                </div>
-                <div class="bg-gray-100 p-3 rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                </div>
-            </div>
-            <!-- Seção 14 -->
-            <div class="bg-white p-8 rounded-2xl shadow-lg flex justify-between items-center opacity-50 cursor-not-allowed">
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Seção 14: Educação e Estudo</h2>
-                    <p class="text-gray-600">Termos acadêmicos e dicas de aprendizado.</p>
-                </div>
-                <div class="bg-gray-100 p-3 rounded-full">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                </div>
-            </div>
         </div>
     </main>
 
     <script>
+        // --- Funções de Ajuda e Gerenciamento de Dados do Usuário (Centralizadas para Reuso) ---
+        // Definindo a quantidade de XP por lição e os pontos de XP para cada nível
+        const XP_PER_LESSON = 50;
+        const XP_LEVELS = [
+            0,   // Nível 1 começa com 0 XP
+            100, // Nível 2 precisa de 100 XP
+            250, // Nível 3 precisa de 250 XP
+            500, // Nível 4 precisa de 500 XP
+            900, // Nível 5 precisa de 900 XP
+            1500, // Nível 6 precisa de 1500 XP
+            2500, // Nível 7 precisa de 2500 XP
+            3800, // Nível 8 precisa de 3800 XP
+            5000, // Nível 9 precisa de 5000 XP
+            6500, // Nível 10 precisa de 6500 XP
+            8000  // Exemplo: Nível 11 precisa de 8000 XP (adicione mais conforme necessário)
+        ];
+
+        /**
+         * Obtém os dados do usuário logado do localStorage.
+         * Inicializa XP, nível e lições concluídas se não existirem.
+         * @returns {object|null} Dados do usuário ou null se não houver usuário logado.
+         */
+        function getUserData() {
+            const loggedInUser = localStorage.getItem('loggedInUser');
+            if (!loggedInUser) return null;
+
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            let userData = users.find(user => user.name === loggedInUser);
+
+            // Inicializa XP, nível e lições concluídas se não existirem
+            if (!userData.xp) userData.xp = 0;
+            if (!userData.level) userData.level = 1;
+            // Padronizando para 'completedLessons'
+            if (!userData.completedLessons) userData.completedLessons = {}; // { 'secao1-aula1': true, ... }
+
+            return userData;
+        }
+
+        /**
+         * Salva os dados atualizados do usuário no localStorage.
+         * @param {object} userData O objeto de dados do usuário a ser salvo.
+         */
+        function saveUserData(userData) {
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            const userIndex = users.findIndex(user => user.name === localStorage.getItem('loggedInUser'));
+            if (userIndex !== -1) {
+                users[userIndex] = userData;
+                localStorage.setItem('users', JSON.stringify(users));
+            }
+        }
+
+        /**
+         * Calcula o nível atual do usuário e o progresso da barra de XP.
+         * @param {number} xp O XP total do usuário.
+         * @returns {object} Objeto contendo nível, XP para o nível atual/próximo e porcentagem de progresso.
+         */
+        function calculateLevelAndProgress(xp) {
+            let level = 1;
+            let xpForCurrentLevel = 0;
+            let xpForNextLevel = XP_LEVELS[1] || Infinity; // XP necessário para o próximo nível
+
+            for (let i = 0; i < XP_LEVELS.length; i++) {
+                if (xp >= XP_LEVELS[i]) {
+                    level = i + 1; // O nível é o índice + 1
+                    xpForCurrentLevel = XP_LEVELS[i];
+                    xpForNextLevel = XP_LEVELS[i + 1] || Infinity; // Define o XP para o próximo nível ou infinito se for o último
+                } else {
+                    break; // Sai do loop se o XP for menor que o requisito do nível atual
+                }
+            }
+            
+            const xpGainedInLevel = xp - xpForCurrentLevel; // XP ganho dentro do nível atual
+            // XP necessário para o próximo nível a partir do início do nível atual
+            const xpNeededForNextLevel = (xpForNextLevel === Infinity) ? Infinity : (xpForNextLevel - xpForCurrentLevel);
+            const progressPercentage = (xpNeededForNextLevel > 0 && xpNeededForNextLevel !== Infinity) ? (xpGainedInLevel / xpNeededForNextLevel) * 100 : 100;
+
+            return {
+                level: level,
+                xpForCurrentLevel: xpForCurrentLevel,
+                xpForNextLevel: xpForNextLevel,
+                xpGainedInLevel: xpGainedInLevel,
+                xpNeededForNextLevelDisplay: (xpForNextLevel === Infinity) ? 'MAX' : xpNeededForNextLevel, // Para exibição
+                progressPercentage: progressPercentage
+            };
+        }
+
+        /**
+         * Atualiza a barra de progresso de XP e o nível no menu lateral.
+         */
+        function updateProgressBarInMenu() {
+            const userData = getUserData();
+            if (!userData) {
+                console.log("Usuário não logado, não é possível atualizar a barra de progresso.");
+                return;
+            }
+
+            const { level, xpGainedInLevel, xpNeededForNextLevelDisplay, progressPercentage } = calculateLevelAndProgress(userData.xp);
+
+            const userLevelMenuEl = document.getElementById('user-level-menu');
+            const xpProgressBarEl = document.getElementById('xp-progress-bar');
+            const currentXpMenuEl = document.getElementById('current-xp-menu');
+            const nextLevelXpMenuEl = document.getElementById('next-level-xp-menu');
+
+            if (userLevelMenuEl) userLevelMenuEl.textContent = level;
+            if (xpProgressBarEl) xpProgressBarEl.style.width = `${progressPercentage}%`;
+            if (currentXpMenuEl) currentXpMenuEl.textContent = xpGainedInLevel;
+            if (nextLevelXpMenuEl) nextLevelXpMenuEl.textContent = xpNeededForNextLevelDisplay;
+        }
+        // --- Fim das Funções de Ajuda ---
+
         // Obter elementos para o modal de mensagem personalizado
         const messageModal = document.getElementById('message-modal');
         const messageTextEl = document.getElementById('message-text');
@@ -298,15 +395,19 @@
         const closeAccountMenuBtn = document.getElementById('close-account-menu');
         const userNameMenuEl = document.getElementById('user-name-menu');
         const logoutBtnMenu = document.getElementById('logout-btn-menu');
+        const loggedInMenuOptions = document.getElementById('logged-in-menu-options');
+        const loggedOutMenuOptions = document.getElementById('logged-out-menu-options'); 
+        const menuLoginBtn = document.getElementById('menu-login-btn'); 
+        const menuRegisterBtn = document.getElementById('menu-register-btn'); 
 
 
-        // Função para exibir mensagens personalizadas
+        // Função para exibir mensagens personalizadas no modal
         function showMessage(message) {
             messageTextEl.textContent = message;
             messageModal.classList.remove('hidden');
         }
 
-        // Função para ocultar mensagens personalizadas
+        // Função para ocultar mensagens personalizadas do modal
         function hideMessage() {
             messageModal.classList.add('hidden');
         }
@@ -315,7 +416,6 @@
         closeMessageModalBtn.addEventListener('click', hideMessage);
         messageOkBtn.addEventListener('click', hideMessage);
         messageModal.addEventListener('click', (e) => {
-            // Fechar se clicar fora do conteúdo
             if (e.target === messageModal) {
                 hideMessage();
             }
@@ -325,35 +425,63 @@
         function performLogout() {
             localStorage.removeItem('loggedInUser'); // Remover usuário logado do armazenamento local
             showMessage('Você foi desconectado.');
-            // Redirecionar para a página inicial após o logout
-            window.location.href = 'index.html';
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
         }
 
-        logoutBtnMenu.addEventListener('click', performLogout);
+        if (logoutBtnMenu) logoutBtnMenu.addEventListener('click', performLogout);
 
         // Lógica do menu da conta
-        accountMenuToggleBtn.addEventListener('click', () => {
-            accountMenuOverlay.classList.remove('hidden');
-            setTimeout(() => {
-                accountMenuContent.classList.add('open');
-            }, 10); // Pequeno atraso para a transição
-        });
+        if (accountMenuToggleBtn) {
+            accountMenuToggleBtn.addEventListener('click', () => {
+                accountMenuOverlay.classList.remove('hidden');
+                setTimeout(() => {
+                    accountMenuContent.classList.add('open');
+                    // Decide qual conteúdo do menu mostrar
+                    const loggedInUser = localStorage.getItem('loggedInUser');
+                    if (loggedInUser) {
+                        if (loggedInMenuOptions) loggedInMenuOptions.classList.remove('hidden');
+                        if (loggedOutMenuOptions) loggedOutMenuOptions.classList.add('hidden');
+                        if (userNameMenuEl) userNameMenuEl.textContent = `Olá, ${loggedInUser}!`;
+                        updateProgressBarInMenu(); // Atualiza a barra de progresso ao abrir o menu
+                    } else {
+                        if (loggedInMenuOptions) loggedInMenuOptions.classList.add('hidden');
+                        if (loggedOutMenuOptions) loggedOutMenuOptions.classList.remove('hidden');
+                    }
+                }, 10); // Pequeno atraso para a transição
+            });
+        }
 
-        closeAccountMenuBtn.addEventListener('click', () => {
-            accountMenuContent.classList.remove('open');
-            setTimeout(() => {
-                accountMenuOverlay.classList.add('hidden');
-            }, 300); // Combinar com a duração da transição
-        });
-
-        accountMenuOverlay.addEventListener('click', (e) => {
-            if (e.target === accountMenuOverlay) {
+        if (closeAccountMenuBtn) {
+            closeAccountMenuBtn.addEventListener('click', () => {
                 accountMenuContent.classList.remove('open');
                 setTimeout(() => {
                     accountMenuOverlay.classList.add('hidden');
-                }, 300);
-            }
+                }, 300); // Combinar com a duração da transição
+            });
+        }
+
+        if (accountMenuOverlay) {
+            accountMenuOverlay.addEventListener('click', (e) => {
+                if (e.target === accountMenuOverlay) {
+                    accountMenuContent.classList.remove('open');
+                    setTimeout(() => {
+                        accountMenuOverlay.classList.add('hidden');
+                    }, 300);
+                }
+            });
+        }
+
+        // Listeners para botões de login/registro DENTRO do menu
+        // Redireciona para index.html com parâmetro para abrir o modal correto
+        if(menuLoginBtn) menuLoginBtn.addEventListener('click', () => {
+            window.location.href = 'index.html?modal=login';
         });
+        if(menuRegisterBtn) menuRegisterBtn.addEventListener('click', () => {
+            window.location.href = 'index.html?modal=register';
+        });
+
 
         // Proteção de conteúdo e carregamento inicial
         document.addEventListener('DOMContentLoaded', () => {
@@ -364,7 +492,9 @@
                     window.location.href = 'index.html';
                 }, 1500); // 1.5 segundos de atraso
             } else {
-                userNameMenuEl.textContent = `Olá, ${loggedInUser}!`; // Atualiza o nome no menu
+                // Ao carregar a página de lições, garantir que o nome do usuário seja exibido no menu
+                if (userNameMenuEl) userNameMenuEl.textContent = `Olá, ${loggedInUser}!`;
+                updateProgressBarInMenu(); // Garante que a barra de progresso seja atualizada no carregamento inicial
             }
         });
     </script>

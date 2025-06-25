@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aula 1 - Seção 1 - EnglishUp</title>
+    <title>Aula 2 - Seção 1 - EnglishUp</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&family=Raleway:wght@700;800&display=swap" rel="stylesheet">
@@ -230,9 +230,9 @@
     <!-- Tela de Conclusão (escondida por padrão) -->
     <div id="completion-screen" class="w-full max-w-2xl text-center hidden">
         <h1 class="text-5xl font-extrabold text-gray-800 mb-4">Parabéns!</h1>
-        <p class="text-xl text-gray-600 mb-8">Você completou a Aula 1 da Seção 1.</p>
+        <p class="text-xl text-gray-600 mb-8">Você completou a Aula 2 da Seção 1.</p>
         <div class="flex justify-center space-x-4">
-            <a href="secao1-aula1.html" class="primary-blue text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition shadow-lg">Refazer Aula</a>
+            <a href="secao1-aula2.html" class="primary-blue text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition shadow-lg">Refazer Aula</a>
             <a href="secao1.html" class="secondary-gray text-gray-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-300 transition shadow-lg">Voltar para Seção</a>
         </div>
     </div>
@@ -242,7 +242,7 @@
         <h1 class="text-5xl font-extrabold text-red-500 mb-4">Game Over</h1>
         <p class="text-xl text-gray-600 mb-8">Você não tem mais vidas.</p>
         <div class="flex justify-center space-x-4">
-            <a href="secao1-aula1.html" class="primary-blue text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition shadow-lg">Tentar Novamente</a>
+            <a href="secao1-aula2.html" class="primary-blue text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition shadow-lg">Tentar Novamente</a>
             <a href="secao1.html" class="secondary-gray text-gray-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-300 transition shadow-lg">Voltar para Seção</a>
         </div>
     </div>
@@ -251,14 +251,14 @@
     <script>
         // Dados para as perguntas e respostas do quiz
         const quizData = [
-            { question: "Como você pediria para ver o cardápio em inglês?", options: ["The bill, please.", "Can I see the menu, please?", "I'd like to book a table.", "What's the special today?"], answer: "Can I see the menu, please?" },
-            { question: "Qual a frase para pedir a conta?", options: ["I want to pay.", "Check, please.", "I'm finished.", "Could I have the bill, please?"], answer: "Could I have the bill, please?" },
-            { question: "O que é um 'main course'?", options: ["A sobremesa.", "A entrada.", "O prato principal.", "A bebida."], answer: "O prato principal." },
-            { question: "Qual a tradução de 'waiter'?", options: ["Cozinheiro", "Garçom", "Cliente", "Gerente"], answer: "Garçom" },
-            { question: "Como você diria 'Está delicioso!' sobre a comida?", options: ["It's awful!", "It's cold.", "It's delicious!", "It's too salty."], answer: "It's delicious!" },
-            { question: "O que significa 'tip' em um restaurante?", options: ["Uma dica.", "Uma gorjeta.", "O topo.", "Um tipo de comida."], answer: "Uma gorjeta." },
-            { question: "Qual a palavra para 'bebida'?", options: ["Food", "Dessert", "Drink", "Appetizer"], answer: "Drink" },
-            { question: "Você quer saber se o restaurante tem opções vegetarianas. Como perguntaria?", options: ["Do you have any meat dishes?", "Are there vegan options?", "Do you serve seafood?", "Do you have vegetarian options?"], answer: "Do you have vegetarian options?" }
+            { question: "O que você diria para o garçom chamar sua atenção de forma educada?", options: ["Hey!", "Excuse me!", "Waiter!", "Hello there!"], answer: "Excuse me!" },
+            { question: "Como você perguntaria se pode pedir algo específico?", options: ["Can I get something?", "I want this.", "May I order?", "Can I ask for...?"], answer: "May I order?" },
+            { question: "Qual a expressão para dizer que você está pronto para pedir?", options: ["I'm waiting.", "I'm good.", "I'm ready to order.", "I'm hungry."], answer: "I'm ready to order." },
+            { question: "Você gostaria de pedir uma recomendação. Como perguntaria?", options: ["What's good?", "What do you suggest?", "Tell me what to eat.", "Recommend something."], answer: "What do you suggest?" },
+            { question: "Como você perguntaria sobre os ingredientes de um prato?", options: ["What's in it?", "Ingredients, please.", "Tell me about the dish.", "What are the ingredients?"], answer: "What are the ingredients?" },
+            { question: "O que significa 'on the side' ao pedir um acompanhamento?", options: ["Dentro do prato.", "Separado.", "Misturado.", "Grande porção."], answer: "Separado." },
+            { question: "Você quer pedir mais água. Como você diria?", options: ["More water!", "Get water.", "Could I have some more water, please?", "I need water."], answer: "Could I have some more water, please?" },
+            { question: "Qual a expressão para pedir a senha do Wi-Fi?", options: ["Internet password?", "Wi-Fi, please.", "Can I have the Wi-Fi password, please?", "What's the code?"], answer: "Can I have the Wi-Fi password, please?" }
         ];
 
         let currentQuestionIndex = 0;
@@ -378,7 +378,7 @@
                 loadQuestion(); // Carrega a próxima questão
             } else {
                 // Todas as questões respondidas, mostra a tela de conclusão
-                markLessonAsCompleted('secao1-aula1'); // Marca a aula como concluída e adiciona XP
+                markLessonAsCompleted('secao1-aula2'); // Marca a aula como concluída e adiciona XP
                 quizContainer.classList.add('hidden');
                 completionScreen.classList.remove('hidden');
             }

@@ -83,6 +83,22 @@
         html {
             scroll-behavior: smooth; /* Para rolagem suave */
         }
+        /* Estilos para a barra de progresso XP */
+        .progress-bar-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 9999px; /* Tailwind's rounded-full */
+            height: 10px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #4A6DFF; /* primary-blue */
+            width: 0%;
+            border-radius: 9999px; /* Tailwind's rounded-full */
+            transition: width 0.5s ease-in-out;
+        }
     </style>
 </head>
 <body class="main-bg">
@@ -108,9 +124,17 @@
             <!-- Conteúdo do menu para USUÁRIOS LOGADOS -->
             <div id="logged-in-menu-options" class="hidden">
                 <p id="user-name-menu" class="font-semibold text-gray-700 text-center mb-6"></p>
+                <!-- Barra de Progresso XP -->
+                <div class="mb-4 text-center">
+                    <p class="text-sm text-gray-600">Nível <span id="user-level-menu">1</span></p>
+                    <div class="progress-bar-container">
+                        <div id="xp-progress-bar" class="progress-bar"></div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1"><span id="current-xp-menu">0</span>/<span id="next-level-xp-menu">100</span> XP</p>
+                </div>
+
                 <ul class="mt-8 space-y-4 text-lg">
                     <li><a href="meu-perfil.html" class="block text-gray-700 hover:text-blue-500 p-2 rounded-lg">Meu Perfil</a></li>
-                    <li><a href="#" class="block text-gray-700 hover:text-blue-500 p-2 rounded-lg">Configurações</a></li>
                     <li><a href="licoes.html" class="block text-gray-700 hover:text-blue-500 p-2 rounded-lg">Minhas Lições</a></li>
                 </ul>
                 <button id="logout-btn-menu" class="w-full text-red-500 border border-red-500 px-6 py-2 rounded-lg hover:bg-red-500 hover:text-white transition mt-8">Sair</button>
@@ -223,11 +247,11 @@
 
     <!-- Conteúdo da Homepage para Usuários LOGADOS -->
     <div id="logged-in-home-content" class="hidden">
-        <main class="container mx-auto px-6 py-16 text-center">
+        <main class="container mx-auto px-6 py-24 text-center">
             <h1 id="welcome-message" class="text-5xl md:text-6xl font-bold text-gray-800 mb-8 leading-tight"></h1>
-            <p class="text-lg text-gray-600 mb-12">Explore novas lições e aprimore suas habilidades em inglês.</p>
+            <p class="text-lg text-gray-600 mb-16">Explore novas lições e aprimore suas habilidades em inglês.</p>
             
-            <section class="mb-16">
+            <section class="my-16">
                 <h2 class="text-4xl font-bold text-gray-800 mb-10">Lições em Destaque para Você</h2>
                 <div id="featured-lessons-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <!-- Lições serão inseridas aqui pelo JS -->
@@ -235,7 +259,7 @@
                 <a href="licoes.html" class="primary-blue text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition shadow-lg mt-12 inline-block">Ver Todas as Lições</a>
             </section>
 
-            <section class="mb-16">
+            <section class="my-16">
                 <h2 class="text-4xl font-bold text-gray-800 mb-10">Artigos e Dicas de Inglês</h2>
                 <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <!-- Artigos serão inseridos aqui pelo JS -->
@@ -259,15 +283,15 @@
             <h2 class="text-2xl font-bold mb-6 text-center">Criar Conta</h2>
             <form id="register-form">
                 <div class="mb-4">
-                    <label for="reg-name" class="block text-gray-700 mb-2">Nome</label>
+                    <label for="reg-name">Nome</label>
                     <input type="text" id="reg-name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
                 </div>
                 <div class="mb-4">
-                    <label for="reg-email" class="block text-gray-700 mb-2">Email</label>
+                    <label for="reg-email">Email</label>
                     <input type="email" id="reg-email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
                 </div>
                 <div class="mb-6">
-                    <label for="reg-password" class="block text-gray-700 mb-2">Senha</label>
+                    <label for="reg-password">Senha</label>
                     <input type="password" id="reg-password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
                 </div>
                 <button type="submit" class="w-full primary-blue text-white py-2 rounded-lg font-semibold hover:opacity-90">Cadastrar</button>
@@ -282,11 +306,11 @@
              <h2 class="text-2xl font-bold mb-6 text-center">Entrar</h2>
             <form id="login-form">
                 <div class="mb-4">
-                    <label for="login-email" class="block text-gray-700 mb-2">Email</label>
+                    <label for="login-email">Email</label>
                     <input type="email" id="login-email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
                 </div>
                 <div class="mb-6">
-                    <label for="login-password" class="block text-gray-700 mb-2">Senha</label>
+                    <label for="login-password">Senha</label>
                     <input type="password" id="login-password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
                 </div>
                 <button type="submit" class="w-full primary-blue text-white py-2 rounded-lg font-semibold hover:opacity-90">Entrar</button>
@@ -305,6 +329,116 @@
     </div>
     
     <script>
+    // --- Funções de Ajuda e Gerenciamento de Dados do Usuário (Centralizadas para Reuso) ---
+    // Definindo a quantidade de XP por lição e os pontos de XP para cada nível
+    const XP_PER_LESSON = 50;
+    const XP_LEVELS = [
+        0,   // Nível 1 começa com 0 XP
+        100, // Nível 2 precisa de 100 XP
+        250, // Nível 3 precisa de 250 XP
+        500, // Nível 4 precisa de 500 XP
+        900, // Nível 5 precisa de 900 XP
+        1500, // Nível 6 precisa de 1500 XP
+        2500, // Nível 7 precisa de 2500 XP
+        3800, // Nível 8 precisa de 3800 XP
+        5000, // Nível 9 precisa de 5000 XP
+        6500, // Nível 10 precisa de 6500 XP
+        8000  // Exemplo: Nível 11 precisa de 8000 XP (adicione mais conforme necessário)
+    ];
+
+    /**
+     * Obtém os dados do usuário logado do localStorage.
+     * Inicializa XP, nível e lições concluídas para XP se não existirem.
+     * @returns {object|null} Dados do usuário ou null se não houver usuário logado.
+     */
+    function getUserData() {
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        if (!loggedInUser) return null;
+
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        let userData = users.find(user => user.name === loggedInUser);
+
+        // Inicializa XP, nível e lições concluídas se não existirem
+        if (!userData.xp) userData.xp = 0;
+        if (!userData.level) userData.level = 1;
+        // Usaremos 'completedLessons' de forma unificada agora, não 'completedLessonsXP'
+        if (!userData.completedLessons) userData.completedLessons = {}; // { 'secao1-aula1': true, ... }
+
+        return userData;
+    }
+
+    /**
+     * Salva os dados atualizados do usuário no localStorage.
+     * @param {object} userData O objeto de dados do usuário a ser salvo.
+     */
+    function saveUserData(userData) {
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        const userIndex = users.findIndex(user => user.name === localStorage.getItem('loggedInUser'));
+        if (userIndex !== -1) {
+            users[userIndex] = userData;
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+    }
+
+    /**
+     * Calcula o nível atual do usuário e o progresso da barra de XP.
+     * @param {number} xp O XP total do usuário.
+     * @returns {object} Objeto contendo nível, XP para o nível atual/próximo e porcentagem de progresso.
+     */
+    function calculateLevelAndProgress(xp) {
+        let level = 1;
+        let xpForCurrentLevel = 0;
+        let xpForNextLevel = XP_LEVELS[1] || Infinity; // XP necessário para o próximo nível
+
+        for (let i = 0; i < XP_LEVELS.length; i++) {
+            if (xp >= XP_LEVELS[i]) {
+                level = i + 1; // O nível é o índice + 1
+                xpForCurrentLevel = XP_LEVELS[i];
+                xpForNextLevel = XP_LEVELS[i + 1] || Infinity; // Define o XP para o próximo nível ou infinito se for o último
+            } else {
+                break; // Sai do loop se o XP for menor que o requisito do nível atual
+            }
+        }
+        
+        const xpGainedInLevel = xp - xpForCurrentLevel; // XP ganho dentro do nível atual
+        // XP necessário para o próximo nível a partir do início do nível atual
+        const xpNeededForNextLevel = (xpForNextLevel === Infinity) ? Infinity : (xpForNextLevel - xpForCurrentLevel);
+        const progressPercentage = (xpNeededForNextLevel > 0 && xpNeededForNextLevel !== Infinity) ? (xpGainedInLevel / xpNeededForNextLevel) * 100 : 100;
+
+        return {
+            level: level,
+            xpForCurrentLevel: xpForCurrentLevel,
+            xpForNextLevel: xpForNextLevel,
+            xpGainedInLevel: xpGainedInLevel,
+            xpNeededForNextLevelDisplay: (xpForNextLevel === Infinity) ? 'MAX' : xpNeededForNextLevel, // Para exibição
+            progressPercentage: progressPercentage
+        };
+    }
+
+    /**
+     * Atualiza a barra de progresso de XP e o nível no menu lateral.
+     */
+    function updateProgressBarInMenu() {
+        const userData = getUserData();
+        if (!userData) {
+            console.log("Usuário não logado, não é possível atualizar a barra de progresso.");
+            return;
+        }
+
+        const { level, xpGainedInLevel, xpNeededForNextLevelDisplay, progressPercentage } = calculateLevelAndProgress(userData.xp);
+
+        const userLevelMenuEl = document.getElementById('user-level-menu');
+        const xpProgressBarEl = document.getElementById('xp-progress-bar');
+        const currentXpMenuEl = document.getElementById('current-xp-menu');
+        const nextLevelXpMenuEl = document.getElementById('next-level-xp-menu');
+
+        if (userLevelMenuEl) userLevelMenuEl.textContent = level;
+        if (xpProgressBarEl) xpProgressBarEl.style.width = `${progressPercentage}%`;
+        if (currentXpMenuEl) currentXpMenuEl.textContent = xpGainedInLevel;
+        if (nextLevelXpMenuEl) nextLevelXpMenuEl.textContent = xpNeededForNextLevelDisplay;
+    }
+    // --- Fim das Funções de Ajuda ---
+
     document.addEventListener('DOMContentLoaded', () => {
         // Obter elementos para os conteúdos da homepage (logado/deslogado)
         const loggedOutHomeContent = document.getElementById('logged-out-home-content');
@@ -314,8 +448,6 @@
         const articlesGrid = document.getElementById('articles-grid');
 
         // Obter elementos para os modais de login/cadastro
-        const registerBtn = document.getElementById('register-btn');
-        const loginBtn = document.getElementById('login-btn');
         const registerModal = document.getElementById('register-modal');
         const loginModal = document.getElementById('login-modal');
         const closeRegisterModalBtn = document.getElementById('close-register-modal');
@@ -354,12 +486,14 @@
 
         // Dados para aulas e artigos (simulados)
         const allLessons = [
-            { title: "Seção 1: No Restaurante", url: "secao1.html", desc: "Aprenda a fazer pedidos e interagir em um restaurante." },
-            { title: "Seção 2: Compras", url: "secao2.html", desc: "Comunicação essencial para fazer compras." },
-            { title: "Seção 3: No Aeroporto", url: "secao3.html", desc: "Frases úteis para a sua viagem." },
-            { title: "Seção 4: Vida Social", url: "#", desc: "Como conversar com novos amigos." },
-            { title: "Seção 5: Negócios e Carreira", url: "#", desc: "Vocabulário e expressões para o ambiente profissional." },
-            { title: "Seção 6: Saúde e Bem-Estar", url: "#", desc: "Diálogos e termos sobre saúde." },
+            { title: "Aula 1: Fazendo seu Pedido", section: "Restaurante", url: "secao1-aula1.html", desc: "Vocabulário essencial para pedir comida e bebida." },
+            { title: "Aula 2: Interagindo com o Garçom", section: "Restaurante", url: "secao1.html", desc: "Como se comunicar com a equipe do restaurante." },
+            { title: "Aula 1: No Supermercado", section: "Compras", url: "secao2-aula1.html", desc: "Vocabulário de produtos e como perguntar preços." },
+            { title: "Aula 2: Roupas e Acessórios", section: "Compras", url: "secao2.html", desc: "Termos para tamanhos, cores e como provar roupas." },
+            { title: "Aula 3: Pagamento e Caixas", section: "Compras", url: "secao2.html", desc: "Frases para pagar, pedir nota fiscal e troco." },
+            { title: "Aula 1: Chegada e Check-in", section: "Aeroporto", url: "secao3.html", desc: "Frases para check-in e segurança." },
+            { title: "Aula 2: Embarque e Voo", section: "Aeroporto", url: "secao3.html", desc: "Comunicação no portão de embarque e durante o voo." },
+            { title: "Aula 1: Primeiros Encontros", section: "Vida Social", url: "#", desc: "Frases para se apresentar e iniciar uma conversa." },
         ];
 
         const allArticles = [
@@ -367,6 +501,7 @@
             { title: "Guia Completo de Phrasal Verbs", snippet: "Desmistifique os phrasal verbs mais comuns e como usá-los no dia a dia.", url: "#" },
             { title: "Como Manter a Motivação no Aprendizado de Inglês", snippet: "Estratégias eficazes para manter o foco e o ânimo durante sua jornada de aprendizado.", url: "#" },
             { title: "Erros Comuns de Iniciantes em Inglês", snippet: "Evite as armadilhas mais comuns ao começar a aprender inglês.", url: "#" },
+            { title: "Benefícios de Aprender Inglês para a Carreira", snippet: "Descubra como a fluência em inglês pode impulsionar sua vida profissional.", url: "#" },
         ];
 
         /**
@@ -393,7 +528,7 @@
                 const lesson = shuffledLessons[i];
                 const lessonCard = `
                     <a href="${lesson.url}" class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 block">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2">${lesson.title}</h3>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">${lesson.title} (${lesson.section})</h3>
                         <p class="text-gray-600">${lesson.desc}</p>
                     </a>
                 `;
@@ -452,15 +587,11 @@
                 loggedOutHomeContent.classList.add('hidden'); // Ocultar conteúdo deslogado
                 loggedInHomeContent.classList.remove('hidden'); // Mostrar conteúdo logado
                 
-                // Exibir botão do menu no cabeçalho
-                // authLinks.classList.add('hidden'); // Não existe mais nesse HTML principal do header
-                // userInfo.classList.remove('hidden'); // Não existe mais nesse HTML principal do header
-                // userInfo.classList.add('flex'); // Não existe mais nesse HTML principal do header
-
                 // Configurar menu lateral para LOGADO
                 loggedInMenuOptions.classList.remove('hidden');
                 loggedOutMenuOptions.classList.add('hidden');
                 userNameMenuEl.textContent = `Olá, ${loggedInUser}!`; // Atualiza o nome no menu lateral
+                updateProgressBarInMenu(); // Atualiza a barra de progresso no menu
 
                 welcomeMessage.textContent = `Bem-vindo de volta, ${loggedInUser}!`; // Personalizar mensagem de boas-vindas
                 renderFeaturedLessons(3); // Renderizar 3 aulas em destaque
@@ -471,11 +602,6 @@
                 loggedOutHomeContent.classList.remove('hidden'); // Mostrar conteúdo deslogado
                 loggedInHomeContent.classList.add('hidden'); // Ocultar conteúdo logado
 
-                // Esconder botão do menu no cabeçalho se ele for para usuário logado (apenas para este HTML)
-                // authLinks.classList.remove('hidden'); // Não existe mais
-                // userInfo.classList.add('hidden'); // Não existe mais
-                // userInfo.classList.remove('flex'); // Não existe mais
-
                 // Configurar menu lateral para NÃO LOGADO
                 loggedInMenuOptions.classList.add('hidden');
                 loggedOutMenuOptions.classList.remove('hidden');
@@ -483,9 +609,6 @@
         }
         
         // Lógica dos modais de login/cadastro: abrir/fechar
-        if (registerBtn) registerBtn.addEventListener('click', () => registerModal.classList.remove('hidden'));
-        if (loginBtn) loginBtn.addEventListener('click', () => loginModal.classList.remove('hidden'));
-        
         closeRegisterModalBtn.addEventListener('click', () => registerModal.classList.add('hidden'));
         closeLoginModalBtn.addEventListener('click', () => loginModal.classList.add('hidden'));
 
@@ -519,7 +642,8 @@
             }
             
             // Adicionar novo usuário ao array
-            users.push({ name, email, password });
+            // Inicializa xp e completedLessons para o novo usuário
+            users.push({ name, email, password, xp: 0, completedLessons: {} }); 
             // Salvar o array de usuários atualizado no armazenamento local
             localStorage.setItem('users', JSON.stringify(users));
             
@@ -542,7 +666,6 @@
                 localStorage.setItem('loggedInUser', user.name); // Armazenar o nome do usuário logado
                 loginModal.classList.add('hidden'); // Ocultar modal de login
                 checkLoginState(); // Atualizar interface (para mostrar conteúdo logado)
-                //window.location.href = 'licoes.html'; // Removido: o usuário fica na home logada
             } else {
                 showMessage('Email ou senha inválidos.'); // Mostrar mensagem de erro
             }
@@ -553,17 +676,27 @@
             localStorage.removeItem('loggedInUser'); // Remover usuário logado do armazenamento local
             checkLoginState(); // Atualizar interface (para mostrar conteúdo deslogado)
             showMessage('Você foi desconectado.');
-            // Opcional: Redirecionar para a página inicial após o logout (já estamos nela)
-            // window.location.reload(); // Recarrega a página para garantir que tudo reset
         }
         logoutBtnMenu.addEventListener('click', performLogout);
 
 
-        // Lógica do menu de conta
+        // Lógica do menu de conta (universal)
         accountMenuToggleBtn.addEventListener('click', () => {
             accountMenuOverlay.classList.remove('hidden');
             setTimeout(() => {
                 accountMenuContent.classList.add('open');
+                // Decide qual conteúdo do menu mostrar
+                const loggedInUser = localStorage.getItem('loggedInUser');
+                if (loggedInUser) {
+                    if (loggedInMenuOptions) loggedInMenuOptions.classList.remove('hidden');
+                    if (loggedOutMenuOptions) loggedOutMenuOptions.classList.add('hidden');
+                    if (userNameMenuEl) userNameMenuEl.textContent = `Olá, ${loggedInUser}!`;
+                    updateProgressBarInMenu(); // Atualiza a barra de progresso ao abrir o menu
+                } else {
+                    if (loggedInMenuOptions) loggedInMenuOptions.classList.add('hidden');
+                    if (loggedOutMenuOptions) loggedOutMenuOptions.classList.remove('hidden');
+                    console.log('Usuário não logado, mostrando opções de login/cadastro no menu.');
+                }
             }, 10); // Pequeno atraso para a transição
         });
 
@@ -623,4 +756,3 @@
     </script>
 </body>
 </html>
-um 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seção 2 - EnglishUp</title>
+    <title>Seção 3 - EnglishUp</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Raleway:wght@800&display=swap" rel="stylesheet">
@@ -193,13 +193,13 @@
         });
 
         // Mapeamento das aulas para seus elementos HTML e IDs de conclusão
-        const lessonsInSection2 = [
-            { id: 'secao2-aula1', linkId: 'aula-link-secao2-01', circleId: 'aula-circle-secao2-01', url: 'secao2-aula1.html' },
-            { id: 'secao2-aula2', linkId: 'aula-link-secao2-02', circleId: 'aula-circle-secao2-02', url: 'secao2-aula2.html' }, 
-            { id: 'secao2-aula3', linkId: 'aula-link-secao2-03', circleId: 'aula-circle-secao2-03', url: 'secao2-aula3.html' },
-            { id: 'secao2-aula4', linkId: 'aula-link-secao2-04', circleId: 'aula-circle-secao2-04', url: 'secao2-aula4.html' },
-            { id: 'secao2-aula5', linkId: 'aula-link-secao2-05', circleId: 'aula-circle-secao2-05', url: 'secao2-aula5.html' },
-            { id: 'secao2-aula6', linkId: 'aula-link-secao2-06', circleId: 'aula-circle-secao2-06', url: 'secao2-aula6.html' }
+        const lessonsInSection3 = [
+            { id: 'secao3-aula1', linkId: 'aula-link-secao3-01', circleId: 'aula-circle-secao3-01', url: 'secao3-aula1.html' },
+            { id: 'secao3-aula2', linkId: 'aula-link-secao3-02', circleId: 'aula-circle-secao3-02', url: 'secao3-aula2.html' }, 
+            { id: 'secao3-aula3', linkId: 'aula-link-secao3-03', circleId: 'aula-circle-secao3-03', url: 'secao3-aula3.html' },
+            { id: 'secao3-aula4', linkId: 'aula-link-secao3-04', circleId: 'aula-circle-secao3-04', url: 'secao3-aula4.html' },
+            { id: 'secao3-aula5', linkId: 'aula-link-secao3-05', circleId: 'aula-circle-secao3-05', url: 'secao3-aula5.html' },
+            { id: 'secao3-aula6', linkId: 'aula-link-secao3-06', circleId: 'aula-circle-secao3-06', url: 'secao3-aula6.html' }
         ];
 
         /**
@@ -210,7 +210,7 @@
             if (!userData) return;
             const completedLessons = userData.completedLessons;
 
-            lessonsInSection2.forEach((lesson, index) => {
+            lessonsInSection3.forEach((lesson, index) => {
                 const aulaLink = document.getElementById(lesson.linkId);
                 const aulaCircle = document.getElementById(lesson.circleId);
 
@@ -222,7 +222,7 @@
                     if (aulaCircle) {
                         aulaCircle.classList.remove('completed-aula-circle');
                         // Se não for a primeira aula e a anterior não estiver concluída, ela deve estar cinza
-                        if (index > 0 && !completedLessons[lessonsInSection2[index - 1].id]) {
+                        if (index > 0 && !completedLessons[lessonsInSection3[index - 1].id]) {
                             aulaCircle.classList.add('bg-gray-200', 'text-gray-500');
                         } else {
                             // Se for a primeira aula ou a anterior estiver concluída, ela deve ser azul
@@ -232,7 +232,7 @@
                 }
 
                 // Desbloqueia a aula se for a primeira ou se a anterior estiver concluída
-                if (index === 0 || (lessonsInSection2[index - 1] && completedLessons[lessonsInSection2[index - 1].id])) {
+                if (index === 0 || (lessonsInSection3[index - 1] && completedLessons[lessonsInSection3[index - 1].id])) {
                     if (aulaLink) {
                         aulaLink.classList.remove('locked-lesson'); // Remove a classe de bloqueio
                         aulaLink.removeAttribute('tabindex'); // Torna o link navegável
@@ -273,50 +273,50 @@
     </header>
 
     <main class="container mx-auto text-center">
-        <h1 class="text-5xl font-extrabold text-gray-800 mb-4">Seção 2</h1>
-        <p class="text-xl text-gray-600 mb-16">Comunicação essencial para fazer compras.</p>
+        <h1 class="text-5xl font-extrabold text-gray-800 mb-4">Seção 3</h1>
+        <p class="text-xl text-gray-600 mb-16">Frases úteis para a sua viagem.</p>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Aula 1: No Supermercado -->
-            <a href="secao2-aula1.html" id="aula-link-secao2-01" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col items-center justify-center text-center">
-                <div id="aula-circle-secao2-01" class="primary-blue text-white w-20 h-20 rounded-full flex items-center justify-center mb-4 text-3xl font-extrabold">01</div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-2">No Supermercado</h2>
-                <p class="text-gray-600">Vocabulário de produtos e como perguntar preços.</p>
+            <!-- Aula 1: Chegada e Check-in -->
+            <a href="secao3-aula1.html" id="aula-link-secao3-01" class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col items-center justify-center text-center">
+                <div id="aula-circle-secao3-01" class="primary-blue text-white w-20 h-20 rounded-full flex items-center justify-center mb-4 text-3xl font-extrabold">01</div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Chegada e Check-in</h2>
+                <p class="text-gray-600">Frases para check-in e segurança no aeroporto.</p>
             </a>
             
-            <!-- Aula 2: Roupas e Acessórios - Bloqueada por padrão -->
-            <a href="secao2-aula2.html" id="aula-link-secao2-02" class="bg-white p-6 rounded-xl shadow-lg locked-lesson flex flex-col items-center justify-center text-center">
-                <div id="aula-circle-secao2-02" class="bg-gray-200 text-gray-500 w-20 h-20 rounded-full flex items-center justify-center mb-4 text-3xl font-extrabold">02</div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-2">Roupas e Acessórios</h2>
-                <p class="text-gray-600">Termos para tamanhos, cores e como provar roupas.</p>
+            <!-- Aula 2: Embarque e Voo - Bloqueada por padrão -->
+            <a href="secao3-aula2.html" id="aula-link-secao3-02" class="bg-white p-6 rounded-xl shadow-lg locked-lesson flex flex-col items-center justify-center text-center">
+                <div id="aula-circle-secao3-02" class="bg-gray-200 text-gray-500 w-20 h-20 rounded-full flex items-center justify-center mb-4 text-3xl font-extrabold">02</div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Embarque e Voo</h2>
+                <p class="text-gray-600">Comunicação no portão de embarque e durante o voo.</p>
             </a>
             
-            <!-- Aula 3: Pagamento e Caixas - Bloqueada por padrão -->
-            <a href="secao2-aula3.html" id="aula-link-secao2-03" class="bg-white p-6 rounded-xl shadow-lg locked-lesson flex flex-col items-center justify-center text-center">
-                <div id="aula-circle-secao2-03" class="bg-gray-200 text-gray-500 w-20 h-20 rounded-full flex items-center justify-center mb-4 text-3xl font-extrabold">03</div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-2">Pagamento e Caixas</h2>
-                <p class="text-gray-600">Frases para pagar, pedir nota fiscal e troco.</p>
+            <!-- Aula 3: Bagagem e Alfândega - Bloqueada por padrão -->
+            <a href="secao3-aula3.html" id="aula-link-secao3-03" class="bg-white p-6 rounded-xl shadow-lg locked-lesson flex flex-col items-center justify-center text-center">
+                <div id="aula-circle-secao3-03" class="bg-gray-200 text-gray-500 w-20 h-20 rounded-full flex items-center justify-center mb-4 text-3xl font-extrabold">03</div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Bagagem e Alfândega</h2>
+                <p class="text-gray-600">Como lidar com sua bagagem e passar pela alfândega.</p>
             </a>
 
-            <!-- Aula 4: Lojas de Eletrônicos - Bloqueada por padrão -->
-            <a href="secao2-aula4.html" id="aula-link-secao2-04" class="bg-white p-6 rounded-xl shadow-lg locked-lesson flex flex-col items-center justify-center text-center">
-                <div id="aula-circle-secao2-04" class="bg-gray-200 text-gray-500 w-20 h-20 rounded-full flex items-center justify-center mb-4 text-3xl font-extrabold">04</div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-2">Lojas de Eletrônicos</h2>
-                <p class="text-gray-600">Vocabulário de tecnologia e como pedir ajuda.</p>
+            <!-- Aula 4: Conexões e Atrasos - Bloqueada por padrão -->
+            <a href="secao3-aula4.html" id="aula-link-secao3-04" class="bg-white p-6 rounded-xl shadow-lg locked-lesson flex flex-col items-center justify-center text-center">
+                <div id="aula-circle-secao3-04" class="bg-gray-200 text-gray-500 w-20 h-20 rounded-full flex items-center justify-center mb-4 text-3xl font-extrabold">04</div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Conexões e Atrasos</h2>
+                <p class="text-gray-600">Frases para perguntar sobre voos de conexão e atrasos.</p>
             </a>
 
-            <!-- Aula 5: Barganhar e Descontos - Bloqueada por padrão -->
-            <a href="secao2-aula5.html" id="aula-link-secao2-05" class="bg-white p-6 rounded-xl shadow-lg locked-lesson flex flex-col items-center justify-center text-center">
-                <div id="aula-circle-secao2-05" class="bg-gray-200 text-gray-500 w-20 h-20 rounded-full flex items-center justify-center mb-4 text-3xl font-extrabold">05</div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-2">Barganhar e Descontos</h2>
-                <p class="text-gray-600">Expressões para negociar preços e pedir descontos.</p>
+            <!-- Aula 5: Serviços no Aeroporto - Bloqueada por padrão -->
+            <a href="secao3-aula5.html" id="aula-link-secao3-05" class="bg-white p-6 rounded-xl shadow-lg locked-lesson flex flex-col items-center justify-center text-center">
+                <div id="aula-circle-secao3-05" class="bg-gray-200 text-gray-500 w-20 h-20 rounded-full flex items-center justify-center mb-4 text-3xl font-extrabold">05</div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Serviços no Aeroporto</h2>
+                <p class="text-gray-600">Como usar balcões de informação, lojas e restaurantes.</p>
             </a>
 
-            <!-- Aula 6: Devoluções e Trocas - Bloqueada por padrão -->
-            <a href="secao2-aula6.html" id="aula-link-secao2-06" class="bg-white p-6 rounded-xl shadow-lg locked-lesson flex flex-col items-center justify-center text-center">
-                <div id="aula-circle-secao2-06" class="bg-gray-200 text-gray-500 w-20 h-20 rounded-full flex items-center justify-center mb-4 text-3xl font-extrabold">06</div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-2">Devoluções e Trocas</h2>
-                <p class="text-gray-600">Como lidar com produtos defeituosos ou trocas.</p>
+            <!-- Aula 6: Chegada ao Destino - Bloqueada por padrão -->
+            <a href="secao3-aula6.html" id="aula-link-secao3-06" class="bg-white p-6 rounded-xl shadow-lg locked-lesson flex flex-col items-center justify-center text-center">
+                <div id="aula-circle-secao3-06" class="bg-gray-200 text-gray-500 w-20 h-20 rounded-full flex items-center justify-center mb-4 text-3xl font-extrabold">06</div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Chegada ao Destino</h2>
+                <p class="text-gray-600">Como pegar táxi, encontrar transporte e chegar ao hotel.</p>
             </a>
         </div>
     </main>
